@@ -24,3 +24,39 @@
 .key-selector.is-selected {
   background-color: #4fc3f7;
 }
+
+input.search-bar {
+    width: 20%;
+    margin-right: 2%
+}
+
+div.search-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+button.search-btn {
+    margin: 0 2rem 0 5px;
+}
+
+table.conj-table {
+    width: 46%;
+    margin: 0 1% 0 1%;
+}
+
+div.content-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div.error-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+div.single {
+    justify-content: center;
+}

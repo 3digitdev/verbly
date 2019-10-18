@@ -148,7 +148,7 @@ errorToString err verb =
             "Network error"
 
         Http.BadStatus resp ->
-            String.fromInt resp ++ ": '" ++ verb ++ "' Not Found"
+            "No verb matches '" ++ verb ++ "'"
 
         Http.BadBody text ->
             "Unexpected response from api: " ++ text
@@ -193,30 +193,28 @@ renderVerb : String -> List String -> Html Msg
 renderVerb verb conjList =
     let
         subjList =
-            [ "IO"
-            , "TU"
-            , "LEI/LUI"
-            , "NOI"
-            , "VOI"
-            , "LORO"
+            [ "io"
+            , "tu"
+            , "lei/lui"
+            , "noi"
+            , "voi"
+            , "loro"
             ]
     in
-    li [ class "collection-item" ]
-        [ table
-            [ class "striped centered" ]
-            [ thead
-                []
-                [ tr []
-                    [ th [ colspan 2, class "center-align" ] [ h5 [] [ text (String.toUpper verb) ] ] ]
-                , tr []
-                    [ th [] [ text "Subject" ]
-                    , th [] [ text "Conjugation" ]
-                    ]
+    table
+        [ class "striped centered conj-table" ]
+        [ thead
+            []
+            [ tr []
+                [ th [ colspan 2, class "center-align" ] [ h5 [] [ text (String.toUpper verb) ] ] ]
+            , tr []
+                [ th [] [ text "Subject" ]
+                , th [] [ text "Conjugation" ]
                 ]
-            , tbody
-                []
-                (List.map2 renderConjRow subjList conjList)
             ]
+        , tbody
+            []
+            (List.map2 renderConjRow subjList conjList)
         ]
 
 
@@ -224,14 +222,21 @@ renderOutput : Model -> Html Msg
 renderOutput model =
     case model.currentConj of
         Resp val ->
-            div []
-                [ ul
-                    [ class "collection" ]
-                    (List.map (\v -> renderVerb (first v) (second v)) (Dict.toList val))
-                ]
+            div [ class "content-container" ]
+                (List.map (\v -> renderVerb (first v) (second v)) (Dict.toList val))
 
         Empty ->
             div [] []
+
+
+renderErrors : Model -> Html Msg
+renderErrors model =
+    case model.errors of
+        "" ->
+            text model.errors
+
+        default ->
+            div [ class "content-container" ] [ h2 [] [ text model.errors ] ]
 
 
 renderNavBar : Model -> Html Msg
@@ -242,7 +247,7 @@ renderNavBar model =
             [ a [ href "#", class "brand-logo center" ]
                 [ text "Verbly" ]
             , ul
-                [ id "nav-mobile", class "left hide-on-med-and-down" ]
+                [ class "left" ]
                 [ li [] [ a [ href "#" ] [ text "Conjugate" ] ]
                 , li [] [ a [ href "#" ] [ text "Translate" ] ]
                 ]
@@ -252,37 +257,25 @@ renderNavBar model =
 
 renderSearchBar : Model -> Html Msg
 renderSearchBar model =
-    div
-        [ class "col s12" ]
-        [ div
-            [ class "row" ]
-            [ div
-                [ class "input-field col s4" ]
-                [ input
-                    [ placeholder "Enter Search Term"
-                    , Html.Attributes.id "search"
-                    , Html.Attributes.value model.searchTerm
-                    , onInput UpdateSearchTerm
-                    ]
-                    [ label
-                        [ for "search" ]
-                        [ text "Search:" ]
-                    ]
-                ]
+    div [ class "search-container" ]
+        [ input
+            [ placeholder "Enter Search Term"
+            , Html.Attributes.id "search"
+            , Html.Attributes.value model.searchTerm
+            , onInput UpdateSearchTerm
+            , class "search-bar"
             ]
-        , div
-            [ class "row" ]
-            [ button
-                [ class "waves-effect waves-light btn-large orange darken-3 col s2"
-                , onClick GetConjugation
-                ]
-                [ text "Conjugate" ]
-            , button
-                [ class "waves-effect waves-light btn-large lime darken-2 col s2"
-                , onClick GetVerbFromConjugation
-                ]
-                [ text "Unconjugate" ]
+            []
+        , button
+            [ class "btn-large orange darken-3 search-btn"
+            , onClick GetConjugation
             ]
+            [ text "Conjugate" ]
+        , button
+            [ class "btn-large lime darken-2 search-btn"
+            , onClick GetVerbFromConjugation
+            ]
+            [ text "Unconjugate" ]
         ]
 
 
@@ -296,12 +289,12 @@ view model =
             ]
             []
         , renderNavBar model
+        , renderSearchBar model
         , div
             [ class "container center-block" ]
             [ div
                 [ class "center-block" ]
-                [ renderSearchBar model
-                , div [] [ text model.errors ]
+                [ renderErrors model
                 , renderOutput model
                 ]
             ]
