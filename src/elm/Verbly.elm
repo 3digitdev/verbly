@@ -22,9 +22,8 @@ main =
         }
 
 
-decodeObject : JD.Decoder ResponseObject
-decodeObject =
-    JD.dict (JD.list JD.string)
+
+-- MODEL
 
 
 type alias Model =
@@ -43,6 +42,15 @@ type QueryResult
     | Empty
 
 
+
+-- INIT
+
+
+init : () -> ( Model, Cmd Msg )
+init _ =
+    update GetConjugation initModel
+
+
 initModel : Model
 initModel =
     { searchTerm = ""
@@ -51,9 +59,8 @@ initModel =
     }
 
 
-init : () -> ( Model, Cmd Msg )
-init _ =
-    update GetConjugation initModel
+
+-- UPDATE
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -96,6 +103,11 @@ update msg model =
                     ( { model | currentConj = Resp conj, errors = "" }, Cmd.none )
 
 
+
+{- Helper Functions for API Interface -}
+-- TODO: Build an "api endpoint builder" to replace the `api` function
+
+
 api : String -> String -> String
 api route data =
     let
@@ -110,34 +122,9 @@ api route data =
             base ++ "/" ++ data
 
 
-getConjugation : String -> Cmd Msg
-getConjugation verb =
-    let
-        expect =
-            case verb of
-                "" ->
-                    Http.expectJson GotAllConjugations decodeObject
-
-                default ->
-                    Http.expectJson GotConjugation decodeObject
-    in
-    Http.get
-        { url = api "/verbs" verb
-        , expect = expect
-        }
-
-
-getVerbFromConjugation : String -> Cmd Msg
-getVerbFromConjugation conjVerb =
-    case conjVerb of
-        "" ->
-            Cmd.none
-
-        default ->
-            Http.get
-                { url = api "/base" conjVerb
-                , expect = Http.expectJson GotVerbFromConjugation decodeObject
-                }
+decodeObject : JD.Decoder ResponseObject
+decodeObject =
+    JD.dict (JD.list JD.string)
 
 
 errorToString : Http.Error -> String -> String
@@ -157,6 +144,44 @@ errorToString err verb =
 
         Http.BadUrl url ->
             "Malformed url: " ++ url
+
+
+
+{- Get Single Conjugation -}
+
+
+getConjugation : String -> Cmd Msg
+getConjugation verb =
+    let
+        expect =
+            case verb of
+                "" ->
+                    Http.expectJson GotAllConjugations decodeObject
+
+                default ->
+                    Http.expectJson GotConjugation decodeObject
+    in
+    Http.get
+        { url = api "/verbs" verb
+        , expect = expect
+        }
+
+
+
+{- Unconjugate -}
+
+
+getVerbFromConjugation : String -> Cmd Msg
+getVerbFromConjugation conjVerb =
+    case conjVerb of
+        "" ->
+            Cmd.none
+
+        default ->
+            Http.get
+                { url = api "/base" conjVerb
+                , expect = Http.expectJson GotVerbFromConjugation decodeObject
+                }
 
 
 
@@ -186,9 +211,99 @@ subscriptions model =
 -- VIEW
 
 
-renderConjRow : String -> String -> Html Msg
-renderConjRow subj conj =
-    tr [] [ td [] [ text subj ], td [] [ text conj ] ]
+view : Model -> Html Msg
+view model =
+    div
+        []
+        [ node "link"
+            [ rel "stylesheet"
+            , href "../../stylesheets/main.css"
+            ]
+            []
+        , renderNavBar model
+        , renderSearchBar model
+        , div
+            [ class "container center-block" ]
+            [ div
+                [ class "center-block" ]
+                [ renderErrors model
+                , renderOutput model
+                ]
+            ]
+        ]
+
+
+
+{- Nav Bar -}
+
+
+renderNavBar : Model -> Html Msg
+renderNavBar model =
+    nav []
+        [ div
+            [ class "nav-wrapper indigo" ]
+            [ a [ href "#", class "brand-logo center" ]
+                [ text "Verbly" ]
+            , ul
+                [ class "left" ]
+                [ li [] [ a [ href "#" ] [ text "Conjugate" ] ]
+                , li [] [ a [ href "#" ] [ text "Translate" ] ]
+                ]
+            ]
+        ]
+
+
+
+{- Search Bar -}
+
+
+renderSearchBar : Model -> Html Msg
+renderSearchBar model =
+    div [ class "search-container" ]
+        [ input
+            [ placeholder "Enter Search Term"
+            , Html.Attributes.id "search"
+            , Html.Attributes.value model.searchTerm
+            , onInput UpdateSearchTerm
+            , class "search-bar"
+            ]
+            []
+        , button
+            [ class "btn-large orange darken-3 search-btn"
+            , onClick GetConjugation
+            ]
+            [ text "Conjugate" ]
+        , button
+            [ class "btn-large lime darken-2 search-btn"
+            , onClick GetVerbFromConjugation
+            ]
+            [ text "Unconjugate" ]
+        ]
+
+
+
+{- Content -}
+
+
+renderErrors : Model -> Html Msg
+renderErrors model =
+    case model.errors of
+        "" ->
+            text model.errors
+
+        default ->
+            div [ class "content-container" ] [ h2 [] [ text model.errors ] ]
+
+
+renderOutput : Model -> Html Msg
+renderOutput model =
+    case model.currentConj of
+        Resp val ->
+            div [ class "content-container" ]
+                (List.map (\v -> renderVerb (first v) (second v)) (Dict.toList val))
+
+        Empty ->
+            div [] []
 
 
 renderVerb : String -> List String -> Html Msg
@@ -220,84 +335,6 @@ renderVerb verb conjList =
         ]
 
 
-renderOutput : Model -> Html Msg
-renderOutput model =
-    case model.currentConj of
-        Resp val ->
-            div [ class "content-container" ]
-                (List.map (\v -> renderVerb (first v) (second v)) (Dict.toList val))
-
-        Empty ->
-            div [] []
-
-
-renderErrors : Model -> Html Msg
-renderErrors model =
-    case model.errors of
-        "" ->
-            text model.errors
-
-        default ->
-            div [ class "content-container" ] [ h2 [] [ text model.errors ] ]
-
-
-renderNavBar : Model -> Html Msg
-renderNavBar model =
-    nav []
-        [ div
-            [ class "nav-wrapper indigo" ]
-            [ a [ href "#", class "brand-logo center" ]
-                [ text "Verbly" ]
-            , ul
-                [ class "left" ]
-                [ li [] [ a [ href "#" ] [ text "Conjugate" ] ]
-                , li [] [ a [ href "#" ] [ text "Translate" ] ]
-                ]
-            ]
-        ]
-
-
-renderSearchBar : Model -> Html Msg
-renderSearchBar model =
-    div [ class "search-container" ]
-        [ input
-            [ placeholder "Enter Search Term"
-            , Html.Attributes.id "search"
-            , Html.Attributes.value model.searchTerm
-            , onInput UpdateSearchTerm
-            , class "search-bar"
-            ]
-            []
-        , button
-            [ class "btn-large orange darken-3 search-btn"
-            , onClick GetConjugation
-            ]
-            [ text "Conjugate" ]
-        , button
-            [ class "btn-large lime darken-2 search-btn"
-            , onClick GetVerbFromConjugation
-            ]
-            [ text "Unconjugate" ]
-        ]
-
-
-view : Model -> Html Msg
-view model =
-    div
-        []
-        [ node "link"
-            [ rel "stylesheet"
-            , href "../../stylesheets/main.css"
-            ]
-            []
-        , renderNavBar model
-        , renderSearchBar model
-        , div
-            [ class "container center-block" ]
-            [ div
-                [ class "center-block" ]
-                [ renderErrors model
-                , renderOutput model
-                ]
-            ]
-        ]
+renderConjRow : String -> String -> Html Msg
+renderConjRow subj conj =
+    tr [] [ td [] [ text subj ], td [] [ text conj ] ]
