@@ -1,4 +1,4 @@
-module Main exposing (main)
+module Practice exposing (main)
 
 {- TODO: Make these explicit imports -}
 
@@ -10,6 +10,7 @@ import Html.Events exposing (..)
 import Http
 import Json.Decode as JD exposing (Decoder, dict, list, string)
 import List exposing (..)
+import Random exposing (..)
 import Tuple exposing (..)
 
 
@@ -27,14 +28,14 @@ main =
 
 
 type alias Model =
-    { currentConj : QueryResult
-    , searchTerm : String
-    , errors : String
+    { currentVerb : QueryResult
+    , seed : Random.Seed
+    , playerGuess : Maybe ResponseObject
     }
 
 
 type alias ResponseObject =
-    List (Dict String (List String))
+    Dict String (List String)
 
 
 type QueryResult
@@ -48,14 +49,14 @@ type QueryResult
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    update GetConjugation initModel
+    update NoOp initModel
 
 
 initModel : Model
 initModel =
-    { searchTerm = ""
-    , currentConj = Empty
-    , errors = ""
+    { currentVerb = Empty
+    , seed = Random.initialSeed 0
+    , playerGuess = Nothing
     }
 
 
@@ -69,38 +70,24 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        UpdateSearchTerm content ->
-            ( { model | searchTerm = content }, Cmd.none )
+        GenerateCard ->
+            ( model, getRandomVerb )
 
-        GetConjugation ->
-            ( model, getConjugation model.searchTerm )
-
-        GotAllConjugations result ->
+        GetRandomVerb result ->
             case result of
                 Err httpError ->
-                    ( { model | errors = errorToString httpError model.searchTerm, currentConj = Empty }, Cmd.none )
+                    ( model, Cmd.none )
 
-                Ok conj ->
-                    ( { model | currentConj = Resp conj, errors = "" }, Cmd.none )
+                Ok verb ->
+                    ( { model | currentVerb = Resp verb, playerGuess = randomizeVerb verb }, Cmd.none )
 
-        GotConjugation result ->
-            case result of
-                Err httpError ->
-                    ( { model | errors = errorToString httpError model.searchTerm, currentConj = Empty }, Cmd.none )
+        UpdatePlayerGuess guess ->
+            case model.playerGuess of
+                Nothing ->
+                    ( model, Cmd.none )
 
-                Ok conj ->
-                    ( { model | currentConj = Resp conj, errors = "" }, Cmd.none )
-
-        GetVerbFromConjugation ->
-            ( model, getVerbFromConjugation model.searchTerm )
-
-        GotVerbFromConjugation result ->
-            case result of
-                Err httpError ->
-                    ( { model | errors = errorToString httpError model.searchTerm, currentConj = Empty }, Cmd.none )
-
-                Ok conj ->
-                    ( { model | currentConj = Resp conj, errors = "" }, Cmd.none )
+                Just guess ->
+                    ( { model | playerGuess = Resp guess }, Cmd.none )
 
 
 
@@ -124,7 +111,7 @@ api route data =
 
 decodeObject : JD.Decoder ResponseObject
 decodeObject =
-    JD.list (JD.dict (JD.list JD.string))
+    JD.dict (JD.list JD.string)
 
 
 errorToString : Http.Error -> String -> String
@@ -150,38 +137,12 @@ errorToString err verb =
 {- Get Single Conjugation -}
 
 
-getConjugation : String -> Cmd Msg
-getConjugation verb =
-    let
-        expect =
-            case verb of
-                "" ->
-                    Http.expectJson GotAllConjugations decodeObject
-
-                default ->
-                    Http.expectJson GotConjugation decodeObject
-    in
+getRandomVerb : Cmd Msg
+getRandomVerb =
     Http.get
-        { url = api "/verbs" verb
-        , expect = expect
+        { url = api "/verb/random" ""
+        , expect = Http.expectJson GotConjugation decodeObject
         }
-
-
-
-{- Unconjugate -}
-
-
-getVerbFromConjugation : String -> Cmd Msg
-getVerbFromConjugation conjVerb =
-    case conjVerb of
-        "" ->
-            Cmd.none
-
-        default ->
-            Http.get
-                { url = api "/base" conjVerb
-                , expect = Http.expectJson GotVerbFromConjugation decodeObject
-                }
 
 
 
@@ -189,12 +150,9 @@ getVerbFromConjugation conjVerb =
 
 
 type Msg
-    = GotAllConjugations (Result Http.Error ResponseObject)
-    | GotConjugation (Result Http.Error ResponseObject)
-    | GetConjugation
-    | GetVerbFromConjugation
-    | GotVerbFromConjugation (Result Http.Error ResponseObject)
-    | UpdateSearchTerm String
+    = GenerateCard
+    | GetRandomVerb (Result Http.Error ResponseObject)
+    | UpdatePlayerGuess (Maybe ResponseObject)
     | NoOp
 
 
@@ -244,14 +202,11 @@ renderNavBar model =
             [ class "nav-wrapper indigo" ]
             [ a [ href "#", class "brand-logo center" ]
                 [ text "Verbly" ]
-
-            {- ADD THIS BACK IN WHEN WE HAVE MULTIPLE FUNCTIONALITIES
-               , ul
-                  [ class "left" ]
-                  [ li [] [ a [ href "#" ] [ text "Conjugate" ] ]
-                  , li [] [ a [ href "#" ] [ text "Translate" ] ]
-                  ]
-            -}
+            , ul
+                [ class "left" ]
+                [ li [] [ a [ href "#" ] [ text "Practice" ] ]
+                , li [] [ a [ href "#" ] [ text "Translate" ] ]
+                ]
             ]
         ]
 
@@ -260,13 +215,13 @@ renderNavBar model =
 {- Search Bar -}
 
 
-renderSearchBar : Model -> Html Msg
-renderSearchBar model =
+renderInput : Model -> Html Msg
+renderInput model =
     div [ class "search-container" ]
         [ input
             [ placeholder "Enter Search Term"
             , Html.Attributes.id "search"
-            , Html.Attributes.value model.searchTerm
+            , Html.Attributes.value model.playerGuess
             , onInput UpdateSearchTerm
             , class "search-bar"
             ]
@@ -303,29 +258,14 @@ renderOutput model =
     case model.currentConj of
         Resp val ->
             div [ class "content-container" ]
-                (renderMultipleVerbs val)
+                (List.map (\v -> renderVerb (first v) (second v)) (Dict.toList val))
 
         Empty ->
             div [] []
 
 
-renderMultipleVerbs : List (Dict String (List String)) -> List (Html Msg)
-renderMultipleVerbs verbList =
-    List.map (\v -> renderVerb (pullVerb v)) verbList
-
-
-pullVerb : Dict String (List String) -> ( String, List String )
-pullVerb verbDict =
-    case Dict.toList verbDict |> head of
-        Nothing ->
-            ( "", [ "" ] )
-
-        Just verb ->
-            verb
-
-
-renderVerb : ( String, List String ) -> Html Msg
-renderVerb verbTup =
+renderVerb : String -> List String -> Html Msg
+renderVerb verb conjList =
     let
         subjList =
             [ "io"
@@ -335,12 +275,6 @@ renderVerb verbTup =
             , "voi"
             , "loro"
             ]
-
-        verb =
-            verbTup |> first
-
-        conjList =
-            verbTup |> second
     in
     table
         [ class "striped centered conj-table" ]
