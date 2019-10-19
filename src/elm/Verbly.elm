@@ -34,7 +34,7 @@ type alias Model =
 
 
 type alias ResponseObject =
-    Dict String (List String)
+    List (Dict String (List String))
 
 
 type QueryResult
@@ -124,7 +124,7 @@ api route data =
 
 decodeObject : JD.Decoder ResponseObject
 decodeObject =
-    JD.dict (JD.list JD.string)
+    JD.list (JD.dict (JD.list JD.string))
 
 
 errorToString : Http.Error -> String -> String
@@ -244,11 +244,14 @@ renderNavBar model =
             [ class "nav-wrapper indigo" ]
             [ a [ href "#", class "brand-logo center" ]
                 [ text "Verbly" ]
-            , ul
-                [ class "left" ]
-                [ li [] [ a [ href "#" ] [ text "Conjugate" ] ]
-                , li [] [ a [ href "#" ] [ text "Translate" ] ]
-                ]
+
+            {- ADD THIS BACK IN WHEN WE HAVE MULTIPLE FUNCTIONALITIES
+               , ul
+                  [ class "left" ]
+                  [ li [] [ a [ href "#" ] [ text "Conjugate" ] ]
+                  , li [] [ a [ href "#" ] [ text "Translate" ] ]
+                  ]
+            -}
             ]
         ]
 
@@ -300,14 +303,29 @@ renderOutput model =
     case model.currentConj of
         Resp val ->
             div [ class "content-container" ]
-                (List.map (\v -> renderVerb (first v) (second v)) (Dict.toList val))
+                (renderMultipleVerbs val)
 
         Empty ->
             div [] []
 
 
-renderVerb : String -> List String -> Html Msg
-renderVerb verb conjList =
+renderMultipleVerbs : List (Dict String (List String)) -> List (Html Msg)
+renderMultipleVerbs verbList =
+    List.map (\v -> renderVerb (pullVerb v)) verbList
+
+
+pullVerb : Dict String (List String) -> ( String, List String )
+pullVerb verbDict =
+    case Dict.toList verbDict |> head of
+        Nothing ->
+            ( "", [ "" ] )
+
+        Just verb ->
+            verb
+
+
+renderVerb : ( String, List String ) -> Html Msg
+renderVerb verbTup =
     let
         subjList =
             [ "io"
@@ -317,6 +335,12 @@ renderVerb verb conjList =
             , "voi"
             , "loro"
             ]
+
+        verb =
+            verbTup |> first
+
+        conjList =
+            verbTup |> second
     in
     table
         [ class "striped centered conj-table" ]

@@ -1,6 +1,8 @@
 import jester
 import json
 import strformat
+import strutils
+import re
 
 const VERBFILE = "../../data/verbs.json"
 
@@ -10,13 +12,21 @@ routes:
         resp(Http200, {"Access-Control-Allow-Origin":"*"}, jdata.pretty)
 
     get "/verbs/@verb":
+        var verb = (@"verb").replace("%20", " ")
+        echo verb
         let jdata = parseFile(VERBFILE)
-        if jdata.hasKey(@"verb"):
-            var ret = newJObject()
-            ret.add(@"verb", jdata[@"verb"])
+        var ret = newJArray()
+        var rx = re(&"(?<!\\w){verb}(?:;|(?!\\w))")
+        echo &"(?<!\\w){verb}(?:;|(?!\\w))"
+        for verbObj in jdata.getElems:
+            for key in verbObj.keys:
+                if key.find(rx) >= 0:
+                    echo key
+                    var json = &"""{{"{key}": {verbObj[key]}}}"""
+                    ret.add(parseJson(json))
+        if ret.len > 0:
             resp(Http200, {"Access-Control-Allow-Origin":"*"}, ret.pretty)
-        else:
-            resp(Http404, {"Access-Control-Allow-Origin":"*"}, (%*{}).pretty)
+        resp(Http404, {"Access-Control-Allow-Origin":"*"}, (%*{}).pretty)
 
     get "/base/@conj":
         let jdata = parseFile(VERBFILE)
