@@ -4,9 +4,24 @@ import strformat
 import strutils
 import re
 import random
+import sequtils
+import sugar
 
 const VERBFILE = "../../data/verbs.json"
 randomize()
+
+type
+    Option = tuple[subject: string, index: int, engSub: string]
+
+proc pick3(subjList: seq[Option]): seq[Option] =
+    var rand: Option
+    result = @[]
+    for i in 0..<3:
+        rand = sample(subjList)
+        while result.any((x) => x.index == rand.index):
+            rand = sample(subjList)
+        result.add(rand)
+
 
 routes:
     get "/verbs":
@@ -27,7 +42,7 @@ routes:
             resp(Http200, {"Access-Control-Allow-Origin":"*"}, ret.pretty)
         resp(Http404, {"Access-Control-Allow-Origin":"*"}, (%*{}).pretty)
 
-    get "/base/@conj":
+    get "/verbs/conjugation/@conj":
         let jdata = parseFile(VERBFILE)
         for k, v in jdata.pairs():
             if v.contains(newJString(@"conj")):
@@ -35,5 +50,36 @@ routes:
         resp(Http404, {"Access-Control-Allow-Origin":"*"}, (%*{}).pretty)
 
     get "/verb/random":
+        var
+            subject: string
+            engSub: string
+            options: seq[string]
+            verb: string
+            next: tuple[subject: string, conjugation: string]
         let jdata = parseFile(VERBFILE)
-        resp(Http200, {"Access-Control-Allow-Origin":"*"}, sample(jdata.getElems).pretty)
+        let verbData = sample(jdata.getElems)
+        let subjects = @[
+            ("Io", 0, "I"),
+            ("Tu", 1, "You"),
+            ("Lui", 2, "He"),
+            ("Lei", 2, "She"),
+            ("Noi", 3, "We"),
+            ("Voi", 4, "You"),
+            ("Loro", 5, "They")
+        ]
+        var picked = subjects.pick3
+        for pick in picked:
+            for key in verbData.keys():
+                verb = key.split(";")[0]
+                subject = pick.subject
+                engSub = pick.engSub
+                if engSub == "He" or engSub == "She":
+                    var split = verb.split(" ")
+                    split[0] &= "(s)"
+                    verb = split.join(" ")
+                options.add(verbData[key].getElems[pick.index].getStr)
+        var right = options[2]
+        shuffle(options)
+        var outData = %*{ "verb": verb, "subject": subject, "englishSubject": engSub, "right": right, "options": options }
+        echo outData
+        resp(Http200, {"Access-Control-Allow-Origin":"*"}, outData.pretty)

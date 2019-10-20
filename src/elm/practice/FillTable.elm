@@ -1,4 +1,4 @@
-module Practice exposing (main)
+module FillTable exposing (main)
 
 {- TODO: Make these explicit imports -}
 

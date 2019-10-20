@@ -2,13 +2,12 @@ module Translate exposing (main)
 
 {- TODO: Make these explicit imports -}
 
+import Api exposing (..)
 import Browser
 import Dict exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Http
-import Json.Decode as JD exposing (Decoder, dict, list, string)
 import List exposing (..)
 import Tuple exposing (..)
 
@@ -31,10 +30,6 @@ type alias Model =
     , searchTerm : String
     , errors : String
     }
-
-
-type alias ResponseObject =
-    List (Dict String (List String))
 
 
 type QueryResult
@@ -104,67 +99,21 @@ update msg model =
 
 
 
-{- Helper Functions for API Interface -}
--- TODO: Build an "api endpoint builder" to replace the `api` function
-
-
-api : String -> String -> String
-api route data =
-    let
-        base =
-            "http://0.0.0.0:5000" ++ route
-    in
-    case data of
-        "" ->
-            base
-
-        default ->
-            base ++ "/" ++ data
-
-
-decodeObject : JD.Decoder ResponseObject
-decodeObject =
-    JD.list (JD.dict (JD.list JD.string))
-
-
-errorToString : Http.Error -> String -> String
-errorToString err verb =
-    case err of
-        Http.Timeout ->
-            "Timeout exceeded"
-
-        Http.NetworkError ->
-            "Network error"
-
-        Http.BadStatus resp ->
-            "No verb matches '" ++ verb ++ "'"
-
-        Http.BadBody text ->
-            "Unexpected response from api: " ++ text
-
-        Http.BadUrl url ->
-            "Malformed url: " ++ url
-
-
-
 {- Get Single Conjugation -}
 
 
 getConjugation : String -> Cmd Msg
 getConjugation verb =
     let
-        expect =
+        ( endpoint, cmd ) =
             case verb of
                 "" ->
-                    Http.expectJson GotAllConjugations decodeObject
+                    ( Api.GetAllVerbs, GotAllConjugations )
 
                 default ->
-                    Http.expectJson GotConjugation decodeObject
+                    ( Api.GetVerbById verb, GotConjugation )
     in
-    Http.get
-        { url = api "/verbs" verb
-        , expect = expect
-        }
+    Api.get endpoint Api.decodeResponseObject cmd
 
 
 
@@ -178,10 +127,7 @@ getVerbFromConjugation conjVerb =
             Cmd.none
 
         default ->
-            Http.get
-                { url = api "/base" conjVerb
-                , expect = Http.expectJson GotVerbFromConjugation decodeObject
-                }
+            Api.get (Api.GetVerbByConjugation conjVerb) Api.decodeResponseObject GotVerbFromConjugation
 
 
 
@@ -189,11 +135,11 @@ getVerbFromConjugation conjVerb =
 
 
 type Msg
-    = GotAllConjugations (Result Http.Error ResponseObject)
-    | GotConjugation (Result Http.Error ResponseObject)
+    = GotAllConjugations Api.GetResponseObjectResult
+    | GotConjugation Api.GetResponseObjectResult
     | GetConjugation
     | GetVerbFromConjugation
-    | GotVerbFromConjugation (Result Http.Error ResponseObject)
+    | GotVerbFromConjugation Api.GetResponseObjectResult
     | UpdateSearchTerm String
     | NoOp
 
@@ -269,7 +215,7 @@ renderSearchBar model =
             ]
             []
         , button
-            [ class "btn-large orange darken-3 search-btn"
+            [ class "btn-large orange darken-3 search-btn-show"
             , onClick GetConjugation
             ]
             [ text "Conjugate" ]

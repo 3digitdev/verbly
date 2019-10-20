@@ -25,6 +25,7 @@
   background-color: #4fc3f7;
 }
 
+
 input.search-bar {
     width: 20%;
     margin-right: 2%
@@ -36,8 +37,19 @@ div.search-container {
     margin-top: 2rem;
 }
 
+div.timer-container {
+    position: absolute;
+    margin-left: 3rem;
+}
+
 button.search-btn {
+    display: none;
     margin: 0 2rem 0 5px;
+}
+
+button.search-btn-show {
+    margin: 0 2rem 0 5px;
+    display: inline-block;
 }
 
 table.conj-table {
@@ -59,4 +71,35 @@ div.error-container {
 
 div.single {
     justify-content: center;
+}
+
+.answers {
+    width: 50%
+}
+
+div.answer-container {
+    display: flex;
+}
+
+.answer-num {
+    flex-grow: 1;
+}
+
+.answer {
+    flex-grow: 8;
+    justify-content: center;
+}
+
+div.subject-container {
+    justify-content: center;
+    margin-top: 6rem;
+    margin-bottom: 2rem;
+}
+
+div.header-container {
+    display: flex;
+}
+
+h1.timer-text {
+    font-size: 120pt;
 }
