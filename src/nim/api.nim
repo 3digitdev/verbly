@@ -58,7 +58,7 @@ routes:
             next: tuple[subject: string, conjugation: string]
         let jdata = parseFile(VERBFILE)
         let verbData = sample(jdata.getElems)
-        let subjects = @[
+        let subjects = @[   # Map subjects to the index of their conjugation
             ("Io", 0, "I"),
             ("Tu", 1, "You"),
             ("Lui", 2, "He"),
@@ -69,17 +69,26 @@ routes:
         ]
         var picked = subjects.pick3
         for pick in picked:
+            # can't do .keys() unpacking, so 1-item loops ftw   :(
             for key in verbData.keys():
-                verb = key.split(";")[0]
+                verb = key.split(";")[0] # Only take 1 of the definitions
                 subject = pick.subject
                 engSub = pick.engSub
+                # We want to make it look good grammatically, so let's add "s" to
+                # the first word of the verb definition for he/she
                 if engSub == "He" or engSub == "She":
                     var split = verb.split(" ")
                     split[0] &= "(s)"
                     verb = split.join(" ")
                 options.add(verbData[key].getElems[pick.index].getStr)
-        var right = options[2]
-        shuffle(options)
-        var outData = %*{ "verb": verb, "subject": subject, "englishSubject": engSub, "right": right, "options": options }
-        echo outData
+        var right = options[2] # last option will always be the "right" one
+        shuffle(options) # let's not make "C" the right answer every time.
+        var outData = %*{
+            "verb": verb,
+            "subject": subject,
+            "englishSubject": engSub,
+            "right": right,
+            "rightIndex": options.find(right), 
+            "options": options
+        }
         resp(Http200, {"Access-Control-Allow-Origin":"*"}, outData.pretty)

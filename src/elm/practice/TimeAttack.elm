@@ -4,11 +4,13 @@ module TimeAttack exposing (main)
 
 import Api exposing (..)
 import Browser
+import Browser.Events exposing (onKeyPress)
 import Dict exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import List exposing (..)
+import List.Extra exposing (elemIndex)
 import String exposing (fromInt)
 import Time exposing (Posix, every)
 
@@ -31,6 +33,8 @@ type alias Model =
     , state : TimerState
     , currentVerb : QueryResult
     , errors : String
+    , guessResult : GuessResult
+    , guessIndex : Int
     }
 
 
@@ -43,6 +47,12 @@ type TimerState
     = Paused
     | Running
     | Finished
+
+
+type GuessResult
+    = Waiting
+    | Correct
+    | Incorrect
 
 
 
@@ -60,6 +70,8 @@ initModel =
     , state = Paused
     , currentVerb = Empty
     , errors = ""
+    , guessResult = Waiting
+    , guessIndex = -1
     }
 
 
@@ -102,6 +114,9 @@ update msg model =
                 Ok verb ->
                     ( { model | currentVerb = Resp verb }, Cmd.none )
 
+        SelectAnswer guessIdx ->
+            ( validateGuess model guessIdx, Cmd.none )
+
 
 toggleState : Model -> TimerState
 toggleState model =
@@ -116,6 +131,28 @@ toggleState model =
             model.state
 
 
+validateGuess : Model -> Int -> Model
+validateGuess model guessIdx =
+    let
+        rightIdx =
+            case model.currentVerb of
+                Empty ->
+                    -1
+
+                Resp verbData ->
+                    verbData.rightIndex
+    in
+    { model
+        | guessResult =
+            if rightIdx == guessIdx then
+                Correct
+
+            else
+                Incorrect
+        , guessIndex = guessIdx
+    }
+
+
 
 -- UPDATE
 
@@ -127,6 +164,7 @@ type Msg
     | Countdown Time.Posix
     | GetNextVerb
     | GotRandomVerb Api.GetRandomVerbDataResult
+    | SelectAnswer Int
 
 
 
@@ -177,7 +215,9 @@ view model =
             ]
             []
         , renderNavBar model
-        , div [ class "timer-container" ] [ h1 [ class "timer-text" ] [ text (fromInt model.timeRemaining) ] ]
+        , div
+            [ class "timer-container" ]
+            [ h1 [ class "timer-text" ] [ text (fromInt model.timeRemaining) ] ]
         , div [ class "header-container" ]
             [ div [ class "subject-container center-block" ] [ h1 [ class "center" ] [ text header ] ] ]
         , div
@@ -191,29 +231,62 @@ renderOutput model =
     case model.currentVerb of
         Resp val ->
             div [ class "content-container" ]
-                (renderQuestion val)
+                (renderQuestion model val)
 
         Empty ->
             div [] []
 
 
-renderQuestion : Api.RandomVerbData -> List (Html Msg)
-renderQuestion randomVerbData =
+renderQuestion : Model -> Api.RandomVerbData -> List (Html Msg)
+renderQuestion model randomVerbData =
     [ ul
         [ class "collection with-header center-block answers" ]
         (li
             [ class "collection-header center" ]
             [ h3 [] [ text (randomVerbData.subject ++ " ____________") ] ]
-            :: List.indexedMap renderAnswer randomVerbData.options
+            :: List.indexedMap (renderAnswer model) randomVerbData.options
         )
     ]
 
 
-renderAnswer : Int -> String -> Html Msg
-renderAnswer index answer =
-    li [ class "collection-item" ]
+getResultClass : Model -> Int -> String
+getResultClass model idx =
+    let
+        rightIdx =
+            case model.currentVerb of
+                Empty ->
+                    -1
+
+                Resp verbData ->
+                    verbData.rightIndex
+    in
+    case model.guessResult of
+        Waiting ->
+            ""
+
+        Correct ->
+            if rightIdx == idx then
+                " green darken-2"
+
+            else
+                ""
+
+        Incorrect ->
+            if rightIdx == idx then
+                " green"
+
+            else if model.guessIndex == idx then
+                " red darken-2"
+
+            else
+                ""
+
+
+renderAnswer : Model -> Int -> String -> Html Msg
+renderAnswer model index answer =
+    li [ class ("collection-item" ++ getResultClass model index) ]
         [ div
-            [ class "answer-container" ]
+            [ class "answer-container", onClick (SelectAnswer index) ]
             [ i [ class "medium material-icons answer-num" ] [ text ("looks_" ++ iconIndex (index + 1)) ]
             , div [ class "answer center" ]
                 [ h4 [] [ text answer ]

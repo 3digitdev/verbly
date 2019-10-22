@@ -103,3 +103,7 @@ div.header-container {
 h1.timer-text {
     font-size: 120pt;
 }
+
+div.answer-actual {
+    background-color: rgb(56, 142, 60) !important;
+}

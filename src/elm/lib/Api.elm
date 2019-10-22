@@ -14,6 +14,7 @@ type alias RandomVerbData =
     , subject : String
     , englishSubject : String
     , right : String
+    , rightIndex : Int
     , options : List String
     }
 
@@ -65,11 +66,12 @@ decodeResponseObject =
 
 decodeRandomVerbData : JD.Decoder RandomVerbData
 decodeRandomVerbData =
-    JD.map5 RandomVerbData
+    JD.map6 RandomVerbData
         (JD.field "verb" JD.string)
         (JD.field "subject" JD.string)
         (JD.field "englishSubject" JD.string)
         (JD.field "right" JD.string)
+        (JD.field "rightIndex" JD.int)
         (JD.field "options" (JD.list JD.string))
 
 
