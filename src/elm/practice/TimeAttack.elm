@@ -1,22 +1,17 @@
 module TimeAttack exposing (main)
 
-{- TODO: Make these explicit imports -}
-
-import Api exposing (..)
+import Api
 import Browser
-import Browser.Events exposing (onKeyPress)
 import Delay exposing (TimeUnit(..), after)
-import Dict exposing (..)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
-import List exposing (..)
-import List.Extra exposing (elemIndex)
+import Html exposing (Html)
+import Html.Attributes as Attributes
+import Html.Events as Events
+import List
 import String exposing (fromInt)
-import Task exposing (..)
-import Time exposing (Posix, every)
+import Time exposing (every)
 
 
+main : Program () Model Msg
 main =
     Browser.element
         { init = init
@@ -43,7 +38,7 @@ type alias Model =
 
 
 type QueryResult
-    = Resp RandomVerbData
+    = Resp Api.RandomVerbData
     | Empty
 
 
@@ -124,7 +119,7 @@ update msg model =
         GotRandomVerb result ->
             case result of
                 Err httpError ->
-                    ( { model | currentVerb = Empty, errors = errorToString httpError "" }, Cmd.none )
+                    ( { model | currentVerb = Empty, errors = Api.errorToString httpError "" }, Cmd.none )
 
                 Ok verb ->
                     ( { model | currentVerb = Resp verb }, Cmd.none )
@@ -150,7 +145,7 @@ toggleState model =
         Running ->
             Paused
 
-        default ->
+        _ ->
             model.state
 
 
@@ -180,7 +175,7 @@ validateGuess model guessIdx =
                 Incorrect ->
                     ( 0, 1 )
 
-                default ->
+                Waiting ->
                     ( 0, 0 )
     in
     { model
@@ -218,7 +213,7 @@ subscriptions model =
         Running ->
             Time.every 500 Countdown
 
-        default ->
+        _ ->
             Sub.none
 
 
@@ -229,16 +224,16 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     let
-        ( btnState, btnClass ) =
-            case model.state of
-                Paused ->
-                    ( "Start", "-show" )
+        --( btnState, btnClass ) =
+        --    case model.state of
+        --        Paused ->
+        --            ( "Start", "-show" )
 
-                Running ->
-                    ( "Stop", "-show" )
+        --        Running ->
+        --            ( "Stop", "-show" )
 
-                Finished ->
-                    ( "Restart", "" )
+        --        Finished ->
+        --            ( "Restart", "" )
 
         header =
             case model.currentVerb of
@@ -252,31 +247,31 @@ view model =
                         ++ fromInt (model.correctAnswers + model.wrongAnswers)
                         ++ " correct!"
     in
-    div
+    Html.div
         []
-        [ node "link"
-            [ rel "stylesheet"
-            , href "../../../stylesheets/main.css"
+        [ Html.node "link"
+            [ Attributes.rel "stylesheet"
+            , Attributes.href "../../../stylesheets/main.css"
             ]
             []
         , renderNavBar model
-        , div [ class "sidebar-container" ]
-            [ div [] [ h3 [ class "noBtMrgn" ] [ text "Timer" ] ]
-            , div
+        , Html.div [ Attributes.class "sidebar-container" ]
+            [ Html.div [] [ Html.h3 [ Attributes.class "noBtMrgn" ] [ Html.text "Timer" ] ]
+            , Html.div
                 []
-                [ h1 [ class "timer-text" ] [ text (fromInt (ceiling (toFloat model.timeRemaining / 1000))) ] ]
-            , div
+                [ Html.h1 [ Attributes.class "timer-text" ] [ Html.text (fromInt (ceiling (toFloat model.timeRemaining / 1000))) ] ]
+            , Html.div
                 []
-                [ div []
-                    [ h1 [ class "score-text green-text darken-2" ] [ text ("Right: " ++ fromInt model.correctAnswers) ]
-                    , h1 [ class "score-text red-text darken-2" ] [ text ("Wrong: " ++ fromInt model.wrongAnswers) ]
+                [ Html.div []
+                    [ Html.h1 [ Attributes.class "score-text green-text darken-2" ] [ Html.text ("Right: " ++ fromInt model.correctAnswers) ]
+                    , Html.h1 [ Attributes.class "score-text red-text darken-2" ] [ Html.text ("Wrong: " ++ fromInt model.wrongAnswers) ]
                     ]
                 ]
             ]
-        , div [ class "header-container" ]
-            [ div [ class "subject-container center-block" ] [ h1 [ class "center" ] [ text header ] ] ]
-        , div
-            [ class "container center-block" ]
+        , Html.div [ Attributes.class "header-container" ]
+            [ Html.div [ Attributes.class "subject-container center-block" ] [ Html.h1 [ Attributes.class "center" ] [ Html.text header ] ] ]
+        , Html.div
+            [ Attributes.class "container center-block" ]
             [ renderOutput model ]
         ]
 
@@ -290,26 +285,26 @@ renderOutput : Model -> Html Msg
 renderOutput model =
     case model.currentVerb of
         Resp val ->
-            div [ class "content-container" ]
+            Html.div [ Attributes.class "content-container" ]
                 (renderQuestion model val)
 
         Empty ->
-            div [ class "content-container" ]
-                [ button
-                    [ class "waves-effect waves-light btn-large xl-button orange darken-3"
-                    , onClick Reset
+            Html.div [ Attributes.class "content-container" ]
+                [ Html.button
+                    [ Attributes.class "waves-effect waves-light btn-large xl-button orange darken-3"
+                    , Events.onClick Reset
                     ]
-                    [ text "Restart" ]
+                    [ Html.text "Restart" ]
                 ]
 
 
 renderQuestion : Model -> Api.RandomVerbData -> List (Html Msg)
 renderQuestion model randomVerbData =
-    [ ul
-        [ class "collection with-header center-block answers" ]
-        (li
-            [ class "collection-header center" ]
-            [ h3 [] [ text (randomVerbData.subject ++ " ____________") ] ]
+    [ Html.ul
+        [ Attributes.class "collection with-header center-block answers" ]
+        (Html.li
+            [ Attributes.class "collection-header center" ]
+            [ Html.h3 [] [ Html.text (randomVerbData.subject ++ " ____________") ] ]
             :: List.indexedMap (renderAnswer model) randomVerbData.options
         )
     ]
@@ -356,15 +351,15 @@ renderAnswer model index answer =
                 Waiting ->
                     SelectAnswer
 
-                default ->
+                _ ->
                     DisableClick
     in
-    li [ class ("collection-item" ++ getResultClass model index) ]
-        [ div
-            [ class "answer-container", onClick (msg index) ]
-            [ i [ class "medium material-icons answer-num" ] [ text ("looks_" ++ iconIndex (index + 1)) ]
-            , div [ class "answer center" ]
-                [ h4 [] [ text answer ]
+    Html.li [ Attributes.class ("collection-item" ++ getResultClass model index) ]
+        [ Html.div
+            [ Attributes.class "answer-container", Events.onClick (msg index) ]
+            [ Html.i [ Attributes.class "medium material-icons answer-num" ] [ Html.text ("looks_" ++ iconIndex (index + 1)) ]
+            , Html.div [ Attributes.class "answer center" ]
+                [ Html.h4 [] [ Html.text answer ]
                 ]
             ]
         ]
@@ -379,7 +374,7 @@ iconIndex idx =
         2 ->
             "two"
 
-        default ->
+        _ ->
             fromInt idx
 
 
@@ -389,15 +384,15 @@ iconIndex idx =
 
 renderNavBar : Model -> Html Msg
 renderNavBar model =
-    nav []
-        [ div
-            [ class "nav-wrapper indigo" ]
-            [ a [ href "#", class "brand-logo center" ]
-                [ text "Verbly" ]
-            , ul
-                [ class "left" ]
-                [ li [] [ a [ href "#" ] [ text "Practice" ] ]
-                , li [] [ a [ href "#" ] [ text "Translate" ] ]
+    Html.nav []
+        [ Html.div
+            [ Attributes.class "nav-wrapper indigo" ]
+            [ Html.a [ Attributes.href "#", Attributes.class "brand-logo center" ]
+                [ Html.text "Verbly" ]
+            , Html.ul
+                [ Attributes.class "left" ]
+                [ Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Practice" ] ]
+                , Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Translate" ] ]
                 ]
             ]
         ]

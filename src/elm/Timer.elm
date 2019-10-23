@@ -18,7 +18,7 @@ module Timer exposing
 
 import List exposing (map)
 import String exposing (fromInt, join)
-import Time exposing (Posix, every)
+import Time exposing (every)
 
 
 
@@ -44,7 +44,7 @@ type Control
 
 
 type Action
-    = NoOp Time.Posix
+    = NoOp
     | Toggle
     | Reset
     | Tick Time.Posix
@@ -66,7 +66,7 @@ initModel seconds =
 update : Action -> Model -> Model
 update action model =
     case action of
-        NoOp _ ->
+        NoOp ->
             model
 
         Toggle ->
@@ -118,12 +118,12 @@ oneSecondMs =
 
 oneMinuteMs : Int
 oneMinuteMs =
-    1000 * 60
+    oneSecondMs * 60
 
 
 oneHourMs : Int
 oneHourMs =
-    1000 * 3600
+    oneMinuteMs * 60
 
 
 fromHours : Int -> Int
