@@ -78,7 +78,10 @@ routes:
                 # the first word of the verb definition for he/she
                 if engSub == "He" or engSub == "She":
                     var split = verb.split(" ")
-                    split[0] &= "(s)"
+                    if split[0][^1] == 's':
+                        split[0] &= "(es)"
+                    else:
+                        split[0] &= "(s)"
                     verb = split.join(" ")
                 options.add(verbData[key].getElems[pick.index].getStr)
         var right = options[2] # last option will always be the "right" one
@@ -88,7 +91,7 @@ routes:
             "subject": subject,
             "englishSubject": engSub,
             "right": right,
-            "rightIndex": options.find(right), 
+            "rightIndex": options.find(right),
             "options": options
         }
         resp(Http200, {"Access-Control-Allow-Origin":"*"}, outData.pretty)

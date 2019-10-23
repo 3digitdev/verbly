@@ -5,6 +5,7 @@ module TimeAttack exposing (main)
 import Api exposing (..)
 import Browser
 import Browser.Events exposing (onKeyPress)
+import Delay exposing (TimeUnit(..), after)
 import Dict exposing (..)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -12,6 +13,7 @@ import Html.Events exposing (..)
 import List exposing (..)
 import List.Extra exposing (elemIndex)
 import String exposing (fromInt)
+import Task exposing (..)
 import Time exposing (Posix, every)
 
 
@@ -35,6 +37,8 @@ type alias Model =
     , errors : String
     , guessResult : GuessResult
     , guessIndex : Int
+    , correctAnswers : Int
+    , wrongAnswers : Int
     }
 
 
@@ -66,12 +70,14 @@ init _ =
 
 initModel : Model
 initModel =
-    { timeRemaining = 30
+    { timeRemaining = 10000
     , state = Paused
     , currentVerb = Empty
     , errors = ""
     , guessResult = Waiting
     , guessIndex = -1
+    , correctAnswers = 0
+    , wrongAnswers = 0
     }
 
 
@@ -85,26 +91,35 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
+        DisableClick _ ->
+            ( model, Cmd.none )
+
         ToggleTimer ->
             ( { model | state = toggleState model }, Cmd.none )
 
-        ResetTimer ->
-            ( initModel, Cmd.none )
+        Reset ->
+            init ()
 
         Countdown _ ->
             let
                 ( newTime, state ) =
-                    case model.timeRemaining of
-                        1 ->
-                            ( 0, Finished )
+                    if model.timeRemaining <= 500 then
+                        ( 0, Finished )
 
-                        default ->
-                            ( model.timeRemaining - 1, model.state )
+                    else
+                        ( model.timeRemaining - 500, model.state )
+
+                verb =
+                    if newTime == 0 then
+                        Empty
+
+                    else
+                        model.currentVerb
             in
-            ( { model | timeRemaining = newTime, state = state }, Cmd.none )
+            ( { model | timeRemaining = newTime, state = state, currentVerb = verb }, Cmd.none )
 
         GetNextVerb ->
-            ( model, Api.get Api.GetRandomVerb Api.decodeRandomVerbData GotRandomVerb )
+            ( model, getVerb )
 
         GotRandomVerb result ->
             case result of
@@ -115,7 +130,15 @@ update msg model =
                     ( { model | currentVerb = Resp verb }, Cmd.none )
 
         SelectAnswer guessIdx ->
-            ( validateGuess model guessIdx, Cmd.none )
+            ( validateGuess model guessIdx, Delay.after 500 Millisecond ResetQuestion )
+
+        ResetQuestion ->
+            ( { model | guessResult = Waiting }, getVerb )
+
+
+getVerb : Cmd Msg
+getVerb =
+    Api.get Api.GetRandomVerb Api.decodeRandomVerbData GotRandomVerb
 
 
 toggleState : Model -> TimerState
@@ -141,15 +164,31 @@ validateGuess model guessIdx =
 
                 Resp verbData ->
                     verbData.rightIndex
-    in
-    { model
-        | guessResult =
+
+        result =
             if rightIdx == guessIdx then
                 Correct
 
             else
                 Incorrect
+
+        ( correct, wrong ) =
+            case result of
+                Correct ->
+                    ( 1, 0 )
+
+                Incorrect ->
+                    ( 0, 1 )
+
+                default ->
+                    ( 0, 0 )
+    in
+    { model
+        | guessResult = result
+        , state = Running
         , guessIndex = guessIdx
+        , correctAnswers = model.correctAnswers + correct
+        , wrongAnswers = model.wrongAnswers + wrong
     }
 
 
@@ -159,12 +198,14 @@ validateGuess model guessIdx =
 
 type Msg
     = NoOp
+    | DisableClick Int
     | ToggleTimer
-    | ResetTimer
+    | Reset
     | Countdown Time.Posix
     | GetNextVerb
     | GotRandomVerb Api.GetRandomVerbDataResult
     | SelectAnswer Int
+    | ResetQuestion
 
 
 
@@ -175,7 +216,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     case model.state of
         Running ->
-            Time.every 1000 Countdown
+            Time.every 500 Countdown
 
         default ->
             Sub.none
@@ -205,7 +246,11 @@ view model =
                     val.englishSubject ++ "  " ++ val.verb
 
                 Empty ->
-                    ""
+                    "FINISHED!  You got "
+                        ++ fromInt model.correctAnswers
+                        ++ " out of "
+                        ++ fromInt (model.correctAnswers + model.wrongAnswers)
+                        ++ " correct!"
     in
     div
         []
@@ -215,15 +260,30 @@ view model =
             ]
             []
         , renderNavBar model
-        , div
-            [ class "timer-container" ]
-            [ h1 [ class "timer-text" ] [ text (fromInt model.timeRemaining) ] ]
+        , div [ class "sidebar-container" ]
+            [ div [] [ h3 [ class "noBtMrgn" ] [ text "Timer" ] ]
+            , div
+                []
+                [ h1 [ class "timer-text" ] [ text (fromInt (ceiling (toFloat model.timeRemaining / 1000))) ] ]
+            , div
+                []
+                [ div []
+                    [ h1 [ class "score-text green-text darken-2" ] [ text ("Right: " ++ fromInt model.correctAnswers) ]
+                    , h1 [ class "score-text red-text darken-2" ] [ text ("Wrong: " ++ fromInt model.wrongAnswers) ]
+                    ]
+                ]
+            ]
         , div [ class "header-container" ]
             [ div [ class "subject-container center-block" ] [ h1 [ class "center" ] [ text header ] ] ]
         , div
             [ class "container center-block" ]
             [ renderOutput model ]
         ]
+
+
+timeToSeconds : Int -> String
+timeToSeconds ms =
+    fromInt (ceiling (toFloat ms / 1000))
 
 
 renderOutput : Model -> Html Msg
@@ -234,7 +294,13 @@ renderOutput model =
                 (renderQuestion model val)
 
         Empty ->
-            div [] []
+            div [ class "content-container" ]
+                [ button
+                    [ class "waves-effect waves-light btn-large xl-button orange darken-3"
+                    , onClick Reset
+                    ]
+                    [ text "Restart" ]
+                ]
 
 
 renderQuestion : Model -> Api.RandomVerbData -> List (Html Msg)
@@ -276,7 +342,7 @@ getResultClass model idx =
                 " green"
 
             else if model.guessIndex == idx then
-                " red darken-2"
+                " red"
 
             else
                 ""
@@ -284,9 +350,18 @@ getResultClass model idx =
 
 renderAnswer : Model -> Int -> String -> Html Msg
 renderAnswer model index answer =
+    let
+        msg =
+            case model.guessResult of
+                Waiting ->
+                    SelectAnswer
+
+                default ->
+                    DisableClick
+    in
     li [ class ("collection-item" ++ getResultClass model index) ]
         [ div
-            [ class "answer-container", onClick (SelectAnswer index) ]
+            [ class "answer-container", onClick (msg index) ]
             [ i [ class "medium material-icons answer-num" ] [ text ("looks_" ++ iconIndex (index + 1)) ]
             , div [ class "answer center" ]
                 [ h4 [] [ text answer ]

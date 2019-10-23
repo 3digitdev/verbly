@@ -30,7 +30,7 @@
       ]
    },
    {
-      "bronze; tan":[
+      "tan; bronze":[
          "abbronzo",
          "abbronzi",
          "abbronza",
@@ -70,7 +70,7 @@
       ]
    },
    {
-      "happen; occur":[
+      "occur; happen":[
          "accado",
          "accadi",
          "accade",
@@ -90,7 +90,7 @@
       ]
    },
    {
-      "receive; welcome":[
+      "welcome; receive":[
          "accolgo",
          "accogli",
          "accoglie",
@@ -110,7 +110,7 @@
       ]
    },
    {
-      "become aware of; notice":[
+      "notice; become aware of":[
          "accorgo",
          "accorgi",
          "accorge",
@@ -150,7 +150,7 @@
       ]
    },
    {
-      "affirm; declare":[
+      "declare; affirm":[
          "affermo",
          "affermi",
          "afferma",
@@ -180,7 +180,7 @@
       ]
    },
    {
-      "hasten; hurry":[
+      "hurry; hasten":[
          "affretto",
          "affretti",
          "affretta",
@@ -1480,7 +1480,7 @@
       ]
    },
    {
-      "displease; sorry (for), be":[
+      "displease":[
          "dispiaccio",
          "dispiaci",
          "dispiace",
@@ -2020,7 +2020,7 @@
       ]
    },
    {
-      "lie (down)":[
+      "lie down":[
          "giaccio",
          "giaci",
          "giace",
@@ -2660,7 +2660,7 @@
       ]
    },
    {
-      "doctor (dress); medicate":[
+      "medicate; doctor":[
          "medico",
          "medichi",
          "medica",
@@ -3140,7 +3140,7 @@
       ]
    },
    {
-      "pass(proceed)":[
+      "pass":[
          "passo",
          "passi",
          "passa",
@@ -3606,7 +3606,7 @@
       ]
    },
    {
-      "recount (relate)":[
+      "recount":[
          "racconto",
          "racconti",
          "racconta",
@@ -3726,7 +3726,7 @@
       ]
    },
    {
-      "give back; return (restore)":[
+      "give back; return":[
          "restituisco",
          "restituisci",
          "restituisce",
@@ -3806,7 +3806,7 @@
       ]
    },
    {
-      "refuse (reject)":[
+      "refuse":[
          "rifiuto",
          "rifiuti",
          "rifiuta",
@@ -3846,7 +3846,7 @@
       ]
    },
    {
-      "regret; sorry (for), be":[
+      "regret":[
          "rincresco",
          "rincresci",
          "rincresce",
@@ -3976,7 +3976,7 @@
       ]
    },
    {
-      "apply (to); turn around":[
+      "turn around":[
          "rivolgo",
          "rivolgi",
          "rivolge",
@@ -4475,7 +4475,7 @@
       ]
    },
    {
-      "happen; occur; succeed (follow)":[
+      "succeed (follow); happen; occur":[
          "succedo",
          "succedi",
          "succede",
@@ -4805,7 +4805,7 @@
       ]
    },
    {
-      "humble (humiliate)":[
+      "humiliate":[
          "umilio",
          "umili",
          "umilia",
@@ -4885,7 +4885,7 @@
       ]
    },
    {
-      "boast (brag)":[
+      "boast":[
          "vanto",
          "vanti",
          "vanta",
@@ -4985,7 +4985,7 @@
       ]
    },
    {
-      "examine (medical); visit":[
+      "visit; examine (medical)":[
          "visito",
          "visiti",
          "visita",

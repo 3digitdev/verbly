@@ -37,9 +37,24 @@ div.search-container {
     margin-top: 2rem;
 }
 
+div.sidebar-container {
+    position: absolute;
+    margin-left: 3rem;
+}
+
+.noBtMrgn {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
 div.timer-container {
     position: absolute;
     margin-left: 3rem;
+}
+
+div.score-container {
+    position: absolute;
+    margin-right: 3rem;
 }
 
 button.search-btn {
@@ -88,6 +103,7 @@ div.answer-container {
 .answer {
     flex-grow: 8;
     justify-content: center;
+    pointer-events: none;
 }
 
 div.subject-container {
@@ -102,8 +118,26 @@ div.header-container {
 
 h1.timer-text {
     font-size: 120pt;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+h1.score-text {
+    font-size: 50pt;
 }
 
 div.answer-actual {
     background-color: rgb(56, 142, 60) !important;
+}
+
+li.answer-disabled {
+    pointer-events: none;
+}
+
+.xl-button {
+  height: 80px;
+  line-height: 80px;
+  font-size: 4rem;
 }
