@@ -1,17 +1,21 @@
 import jester
 import json
-import strformat
 import strutils
 import re
 import random
 import sequtils
 import sugar
+import db_sqlite
 
-const VERBFILE = "../../data/verbs.json"
+import verbly_db
+
 randomize()
 
 type
-    Option = tuple[subject: string, index: int, engSub: string]
+    Option = tuple
+        subject: string
+        index: int
+        engSub: string
 
 proc pick3(subjList: seq[Option]): seq[Option] =
     var rand: Option
@@ -22,31 +26,42 @@ proc pick3(subjList: seq[Option]): seq[Option] =
             rand = sample(subjList)
         result.add(rand)
 
+proc getVerbData(db: DbConn, data: tuple[vid: int, verb: string]): JsonNode =
+    result = newJObject()
+    var conjs = db.getVerbConjugations(data.vid)
+    var conjAry = newJArray()
+    for conj in conjs:
+        conjAry.add(newJString(conj.replace("\"", "")))
+    result.add(data.verb, conjAry)
 
 routes:
     get "/verbs":
-        let jdata = parseFile(VERBFILE)
-        resp(Http200, {"Access-Control-Allow-Origin":"*"}, jdata.pretty)
+        var ret = newJArray()
+        withSqliteDb(db):
+            for verb in db.getAllVerbs():
+                ret.add(getVerbData(db, verb))
+        resp(Http200, {"Access-Control-Allow-Origin":"*"}, ret.pretty)
 
     get "/verbs/@verb":
         var verb = (@"verb").replace("%20", " ")
-        let jdata = parseFile(VERBFILE)
         var ret = newJArray()
-        var rx = re(&"(?<!\\w){verb}(?:;|(?!\\w))")
-        for verbObj in jdata.getElems:
-            for key in verbObj.keys:
-                if key.find(rx) >= 0:
-                    var json = &"""{{"{key}": {verbObj[key]}}}"""
-                    ret.add(parseJson(json))
+        withSqliteDb(db):
+            let partialMatches = db.matchEnglishVerb(verb)
+            for match in partialMatches:
+                ret.add(getVerbData(db, match))
         if ret.len > 0:
             resp(Http200, {"Access-Control-Allow-Origin":"*"}, ret.pretty)
         resp(Http404, {"Access-Control-Allow-Origin":"*"}, (%*{}).pretty)
 
     get "/verbs/conjugation/@conj":
-        let jdata = parseFile(VERBFILE)
-        for k, v in jdata.pairs():
-            if v.contains(newJString(@"conj")):
-                resp(Http200, {"Access-Control-Allow-Origin":"*"}, (%*{ k: v }).pretty)
+        var conj = (@"conj").replace("%20", " ")
+        var ret = newJArray()
+        withSqliteDb(db):
+            let match = db.getVerbByConjugation(conj)
+            if match.vid != -1:
+                ret.add(getVerbData(db, match))
+        if ret.len > 0:
+            resp(Http200, {"Access-Control-Allow-Origin":"*"}, ret.pretty)
         resp(Http404, {"Access-Control-Allow-Origin":"*"}, (%*{}).pretty)
 
     get "/verb/random":
@@ -55,9 +70,9 @@ routes:
             engSub: string
             options: seq[string]
             verb: string
-            next: tuple[subject: string, conjugation: string]
-        let jdata = parseFile(VERBFILE)
-        let verbData = sample(jdata.getElems)
+            verbData: JsonNode
+        withSqliteDb(db):
+            verbData = getVerbData(db, db.getRandomVerb())
         let subjects = @[   # Map subjects to the index of their conjugation
             ("Io", 0, "I"),
             ("Tu", 1, "You"),
