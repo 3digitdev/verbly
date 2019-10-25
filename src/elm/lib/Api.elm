@@ -1,4 +1,4 @@
-module Api exposing (ResponseObject, get, Endpoint(..), RandomVerbData, errorToString, decodeRandomVerbData, GetRandomVerbDataResult, decodeResponseObject)
+module Api exposing (ResponseObject, get, Endpoint(..), RandomVerbData, errorToString, decodeRandomVerbData, GetResponseObjectResult, GetRandomVerbDataResult, decodeResponseObject)
 
 import Dict exposing (Dict)
 import Http
@@ -17,6 +17,10 @@ type alias RandomVerbData =
     , rightIndex : Int
     , options : List String
     }
+
+
+type alias GetResponseObjectResult =
+    Result Http.Error ResponseObject
 
 
 type alias GetRandomVerbDataResult =
