@@ -40,7 +40,7 @@
       ]
    },
    {
-      "live":[
+      "live (reside)":[
          "abito",
          "abiti",
          "abita",
@@ -340,16 +340,6 @@
       ]
    },
    {
-      "learn":[
-         "apprendo",
-         "apprendi",
-         "apprende",
-         "apprendiamo",
-         "apprendete",
-         "apprendono"
-      ]
-   },
-   {
       "open":[
          "apro",
          "apri",
@@ -590,16 +580,6 @@
       ]
    },
    {
-      "necessary, be":[
-         "bisagno",
-         "bisagni",
-         "bisagna",
-         "bisagniamo",
-         "bisagnate",
-         "bisagnano"
-      ]
-   },
-   {
       "have to; must":[
          "bisogno",
          "bisogni",
@@ -770,7 +750,7 @@
       ]
    },
    {
-      "castigate; punish":[
+      "castigate":[
          "castigo",
          "castighi",
          "castiga",
@@ -930,7 +910,7 @@
       ]
    },
    {
-      "please":[
+      "be pleased":[
          "compiaccio",
          "compiaci",
          "compiace",
@@ -967,16 +947,6 @@
          "compriamo",
          "comprate",
          "comprano"
-      ]
-   },
-   {
-      "understand":[
-         "comprendo",
-         "comprendi",
-         "comprende",
-         "comprendiamo",
-         "comprendete",
-         "comprendono"
       ]
    },
    {
@@ -1541,16 +1511,6 @@
    },
    {
       "become":[
-         "divengo",
-         "divieni",
-         "diviene",
-         "diveniamo",
-         "divenite",
-         "divengono"
-      ]
-   },
-   {
-      "become":[
          "divento",
          "diventi",
          "diventa",
@@ -1860,7 +1820,7 @@
       ]
    },
    {
-      "celebrate":[
+      "party":[
          "festeggio",
          "festeggi",
          "festeggia",
@@ -2047,16 +2007,6 @@
          "giriamo",
          "girate",
          "girano"
-      ]
-   },
-   {
-      "arrive":[
-         "giungo",
-         "giungi",
-         "giunge",
-         "giungiamo",
-         "giungete",
-         "giungono"
       ]
    },
    {
@@ -2380,7 +2330,7 @@
       ]
    },
    {
-      "mean; understand":[
+      "mean":[
          "intendo",
          "intendi",
          "intende",
@@ -2690,7 +2640,7 @@
       ]
    },
    {
-      "place; put; set":[
+      "put":[
          "metto",
          "metti",
          "mette",
@@ -2780,7 +2730,7 @@
       ]
    },
    {
-      "change":[
+      "mutate":[
          "muto",
          "muti",
          "muta",
@@ -3260,7 +3210,7 @@
       ]
    },
    {
-      "please":[
+      "pleases":[
          "piaccio",
          "piaci",
          "piace",
@@ -3301,8 +3251,12 @@
    },
    {
       "rain":[
+         "piovo",
+         "piovi",
          "piove",
-         "piovuto"
+         "pioviamo",
+         "piovete",
+         "piovono"
       ]
    },
    {
@@ -3316,7 +3270,7 @@
       ]
    },
    {
-      "place; put; set":[
+      "place":[
          "pongo",
          "poni",
          "pone",
@@ -3476,7 +3430,7 @@
       ]
    },
    {
-      "forbid; prohibit":[
+      "prohibit":[
          "proibisco",
          "proibisci",
          "proibisce",
@@ -3566,7 +3520,7 @@
       ]
    },
    {
-      "castigate; punish":[
+      "punish":[
          "punisco",
          "punisci",
          "punisce",
@@ -4006,16 +3960,6 @@
       ]
    },
    {
-      "succeed":[
-         "ruiscisco",
-         "ruiscisci",
-         "ruiscisce",
-         "ruisciamo",
-         "ruiscite",
-         "ruisciscono"
-      ]
-   },
-   {
       "come up; go up; mount":[
          "salgo",
          "sali",
@@ -4056,7 +4000,7 @@
       ]
    },
    {
-      "know; learn":[
+      "know":[
          "so",
          "sai",
          "sa",
@@ -4102,16 +4046,6 @@
          "scegliamo",
          "scegliete",
          "scelgono"
-      ]
-   },
-   {
-      "come down; descend; go down":[
-         "scendo",
-         "scendi",
-         "scende",
-         "scendiamo",
-         "scendete",
-         "scendono"
       ]
    },
    {
@@ -4615,7 +4549,7 @@
       ]
    },
    {
-      "draw; pull":[
+      "pull":[
          "tiro",
          "tiri",
          "tira",
@@ -4675,7 +4609,7 @@
       ]
    },
    {
-      "draw; pull":[
+      "draw":[
          "traggo",
          "trai",
          "trae",
@@ -4692,16 +4626,6 @@
          "trasciniamo",
          "trascinate",
          "trascinano"
-      ]
-   },
-   {
-      "pass":[
-         "trascorro",
-         "trascorri",
-         "trascorre",
-         "trascorriamo",
-         "trascorrete",
-         "trascorrono"
       ]
    },
    {
@@ -4895,7 +4819,7 @@
       ]
    },
    {
-      "change; vary":[
+      "vary":[
          "vario",
          "varii",
          "varia",
@@ -4965,7 +4889,7 @@
       ]
    },
    {
-      "forbid; prohibit":[
+      "forbid":[
          "vieto",
          "vieti",
          "vieta",
@@ -4995,7 +4919,7 @@
       ]
    },
    {
-      "live":[
+      "live (exist)":[
          "vivo",
          "vivi",
          "vive",
