@@ -6,6 +6,6 @@ repl-temp-*
 # firebase stuff
 .firebase/
 .firebaserc
-.github/
+.github/workflows/
 
 src/nim/api/api
