@@ -3,7 +3,7 @@ import strutils
 import strformat
 import sequtils
 
-const db_name = "../../data/verbly.db"
+const db_name = "../../../data/verbly.db"
 
 # SQL COMMAND TEMPLATES
 const getAllEngVerbs = sql"SELECT vid, eng_translation FROM verbs"

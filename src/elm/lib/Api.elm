@@ -50,7 +50,7 @@ type Endpoint
 
 urlBase : String
 urlBase =
-    "http://localhost:5000"
+    "https://api-verbly.3digit.dev"
 
 
 urlBuilder : Endpoint -> String

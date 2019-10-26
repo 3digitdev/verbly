@@ -6,6 +6,7 @@ import random
 import sequtils
 import sugar
 import db_sqlite
+import os
 
 import verbly_db
 
@@ -34,7 +35,7 @@ proc getVerbData(db: DbConn, data: tuple[vid: int, verb: string]): JsonNode =
         conjAry.add(newJString(conj.replace("\"", "")))
     result.add(data.verb, conjAry)
 
-routes:
+router verbly:
     get "/verbs":
         var ret = newJArray()
         withSqliteDb(db):
@@ -110,3 +111,9 @@ routes:
             "options": options
         }
         resp(Http200, {"Access-Control-Allow-Origin":"*"}, outData.pretty)
+
+when isMainModule:
+    let port = getEnv("PORT").parseInt().Port
+    settings = newSettings(port = port)
+    var server = initJester(verbly, settings=settings)
+    server.serve()

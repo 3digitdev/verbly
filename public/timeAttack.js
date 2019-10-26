@@ -5243,7 +5243,7 @@ var author$project$Api$decodeRandomVerbData = A7(
 		elm$json$Json$Decode$field,
 		'options',
 		elm$json$Json$Decode$list(elm$json$Json$Decode$string)));
-var author$project$Api$urlBase = 'http://api-verbly.3digit.dev';
+var author$project$Api$urlBase = 'https://api-verbly.3digit.dev';
 var author$project$Api$urlBuilder = function (endpoint) {
 	switch (endpoint.$) {
 		case 0:
