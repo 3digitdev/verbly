@@ -1,17 +1,16 @@
 module Translate exposing (main)
 
-{- TODO: Make these explicit imports -}
 
-import Api exposing (..)
+import Api
 import Browser
-import Dict exposing (..)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
-import List exposing (..)
-import Tuple exposing (..)
+import Dict exposing (Dict)
+import Html exposing (Html)
+import Html.Attributes as Attributes
+import Html.Events as Events
+import List
 
 
+main : Program () Model Msg
 main =
     Browser.element
         { init = init
@@ -33,7 +32,7 @@ type alias Model =
 
 
 type QueryResult
-    = Resp ResponseObject
+    = Resp Api.ResponseObject
     | Empty
 
 
@@ -61,27 +60,16 @@ initModel =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none )
-
         UpdateSearchTerm content ->
             ( { model | searchTerm = content }, Cmd.none )
 
         GetConjugation ->
             ( model, getConjugation model.searchTerm )
 
-        GotAllConjugations result ->
-            case result of
-                Err httpError ->
-                    ( { model | errors = errorToString httpError model.searchTerm, currentConj = Empty }, Cmd.none )
-
-                Ok conj ->
-                    ( { model | currentConj = Resp conj, errors = "" }, Cmd.none )
-
         GotConjugation result ->
             case result of
                 Err httpError ->
-                    ( { model | errors = errorToString httpError model.searchTerm, currentConj = Empty }, Cmd.none )
+                    ( { model | errors = Api.errorToString httpError model.searchTerm, currentConj = Empty }, Cmd.none )
 
                 Ok conj ->
                     ( { model | currentConj = Resp conj, errors = "" }, Cmd.none )
@@ -89,13 +77,6 @@ update msg model =
         GetVerbFromConjugation ->
             ( model, getVerbFromConjugation model.searchTerm )
 
-        GotVerbFromConjugation result ->
-            case result of
-                Err httpError ->
-                    ( { model | errors = errorToString httpError model.searchTerm, currentConj = Empty }, Cmd.none )
-
-                Ok conj ->
-                    ( { model | currentConj = Resp conj, errors = "" }, Cmd.none )
 
 
 
@@ -105,15 +86,14 @@ update msg model =
 getConjugation : String -> Cmd Msg
 getConjugation verb =
     let
-        ( endpoint, cmd ) =
-            case verb of
-                "" ->
-                    ( Api.GetAllVerbs, GotAllConjugations )
+        endpoint =
+            if verb == "" then
+                Api.GetAllVerbs
 
-                default ->
-                    ( Api.GetVerbById verb, GotConjugation )
+            else
+                Api.GetVerbById verb
     in
-    Api.get endpoint Api.decodeResponseObject cmd
+    Api.get endpoint Api.decodeResponseObject GotConjugation
 
 
 
@@ -122,12 +102,11 @@ getConjugation verb =
 
 getVerbFromConjugation : String -> Cmd Msg
 getVerbFromConjugation conjVerb =
-    case conjVerb of
-        "" ->
-            Cmd.none
+    if conjVerb == "" then
+        Cmd.none
 
-        default ->
-            Api.get (Api.GetVerbByConjugation conjVerb) Api.decodeResponseObject GotVerbFromConjugation
+    else
+        Api.get (Api.GetVerbByConjugation conjVerb) Api.decodeResponseObject GotConjugation
 
 
 
@@ -135,13 +114,10 @@ getVerbFromConjugation conjVerb =
 
 
 type Msg
-    = GotAllConjugations Api.GetResponseObjectResult
-    | GotConjugation Api.GetResponseObjectResult
+    = GotConjugation Api.GetResponseObjectResult
     | GetConjugation
     | GetVerbFromConjugation
-    | GotVerbFromConjugation Api.GetResponseObjectResult
     | UpdateSearchTerm String
-    | NoOp
 
 
 
@@ -149,7 +125,7 @@ type Msg
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Sub.none
 
 
@@ -159,19 +135,19 @@ subscriptions model =
 
 view : Model -> Html Msg
 view model =
-    div
+    Html.div
         []
-        [ node "link"
-            [ rel "stylesheet"
-            , href "../../stylesheets/main.css"
+        [ Html.node "link"
+            [ Attributes.rel "stylesheet"
+            , Attributes.href "../../stylesheets/main.css"
             ]
             []
-        , renderNavBar model
+        , renderNavBar
         , renderSearchBar model
-        , div
-            [ class "container center-block" ]
-            [ div
-                [ class "center-block" ]
+        , Html.div
+            [ Attributes.class "container center-block" ]
+            [ Html.div
+                [ Attributes.class "center-block" ]
                 [ renderErrors model
                 , renderOutput model
                 ]
@@ -183,17 +159,17 @@ view model =
 {- Nav Bar -}
 
 
-renderNavBar : Model -> Html Msg
-renderNavBar model =
-    nav []
-        [ div
-            [ class "nav-wrapper indigo" ]
-            [ a [ href "#", class "brand-logo center" ]
-                [ text "Verbly" ]
-            , ul
-                [ class "left" ]
-                [ li [] [ a [ href "#" ] [ text "Practice" ] ]
-                , li [] [ a [ href "#" ] [ text "Translate" ] ]
+renderNavBar : Html Msg
+renderNavBar =
+    Html.nav []
+        [ Html.div
+            [ Attributes.class "nav-wrapper indigo" ]
+            [ Html.a [ Attributes.href "#", Attributes.class "brand-logo center" ]
+                [ Html.text "Verbly" ]
+            , Html.ul
+                [ Attributes.class "left" ]
+                [ Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Practice" ] ]
+                , Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Translate" ] ]
                 ]
             ]
         ]
@@ -205,25 +181,25 @@ renderNavBar model =
 
 renderSearchBar : Model -> Html Msg
 renderSearchBar model =
-    div [ class "search-container" ]
-        [ input
-            [ placeholder "Enter Search Term"
-            , Html.Attributes.id "search"
-            , Html.Attributes.value model.searchTerm
-            , onInput UpdateSearchTerm
-            , class "search-bar"
+    Html.div [ Attributes.class "search-container" ]
+        [ Html.input
+            [ Attributes.placeholder "Enter Search Term"
+            , Attributes.id "search"
+            , Attributes.value model.searchTerm
+            , Events.onInput UpdateSearchTerm
+            , Attributes.class "search-bar"
             ]
             []
-        , button
-            [ class "btn-large orange darken-3 search-btn-show"
-            , onClick GetConjugation
+        , Html.button
+            [ Attributes.class "btn-large orange darken-3 search-btn-show"
+            , Events.onClick GetConjugation
             ]
-            [ text "Conjugate" ]
-        , button
-            [ class "btn-large lime darken-2 search-btn"
-            , onClick GetVerbFromConjugation
+            [ Html.text "Conjugate" ]
+        , Html.button
+            [ Attributes.class "btn-large lime darken-2 search-btn"
+            , Events.onClick GetVerbFromConjugation
             ]
-            [ text "Unconjugate" ]
+            [ Html.text "Unconjugate" ]
         ]
 
 
@@ -233,75 +209,69 @@ renderSearchBar model =
 
 renderErrors : Model -> Html Msg
 renderErrors model =
-    case model.errors of
-        "" ->
-            text model.errors
+    if model.errors == "" then
+        Html.text model.errors
 
-        default ->
-            div [ class "content-container" ] [ h2 [] [ text model.errors ] ]
+    else
+        Html.div [ Attributes.class "content-container" ] [ Html.h2 [] [ Html.text model.errors ] ]
 
 
 renderOutput : Model -> Html Msg
 renderOutput model =
     case model.currentConj of
         Resp val ->
-            div [ class "content-container" ]
+            Html.div [ Attributes.class "content-container" ]
                 (renderMultipleVerbs val)
 
         Empty ->
-            div [] []
+            Html.text ""
 
 
 renderMultipleVerbs : List (Dict String (List String)) -> List (Html Msg)
 renderMultipleVerbs verbList =
-    List.map (\v -> renderVerb (pullVerb v)) verbList
+    List.map (pullVerb >> renderVerb) verbList
 
 
 pullVerb : Dict String (List String) -> ( String, List String )
 pullVerb verbDict =
-    case Dict.toList verbDict |> head of
+    case Dict.toList verbDict |> List.head of
         Nothing ->
-            ( "", [ "" ] )
+            ( "", [] )
 
         Just verb ->
             verb
 
 
 renderVerb : ( String, List String ) -> Html Msg
-renderVerb verbTup =
-    let
-        subjList =
-            [ "io"
-            , "tu"
-            , "lei/lui"
-            , "noi"
-            , "voi"
-            , "loro"
-            ]
-
-        verb =
-            verbTup |> first
-
-        conjList =
-            verbTup |> second
-    in
-    table
-        [ class "striped centered conj-table" ]
-        [ thead
+renderVerb ( verb, conjList ) =
+    Html.table
+        [ Attributes.class "striped centered conj-table" ]
+        [ Html.thead
             []
-            [ tr []
-                [ th [ colspan 2, class "center-align" ] [ h5 [] [ text (String.toUpper verb) ] ] ]
-            , tr []
-                [ th [] [ text "Subject" ]
-                , th [] [ text "Conjugation" ]
+            [ Html.tr []
+                [ Html.th [ Attributes.colspan 2, Attributes.class "center-align" ] [ Html.h5 [] [ Html.text (String.toUpper verb) ] ] ]
+            , Html.tr []
+                [ Html.th [] [ Html.text "Subject" ]
+                , Html.th [] [ Html.text "Conjugation" ]
                 ]
             ]
-        , tbody
+        , Html.tbody
             []
             (List.map2 renderConjRow subjList conjList)
         ]
 
 
+subjList : List String
+subjList =
+    [ "io"
+    , "tu"
+    , "lei/lui"
+    , "noi"
+    , "voi"
+    , "loro"
+    ]
+
+
 renderConjRow : String -> String -> Html Msg
 renderConjRow subj conj =
-    tr [] [ td [] [ text subj ], td [] [ text conj ] ]
+    Html.tr [] [ Html.td [] [ Html.text subj ], Html.td [] [ Html.text conj ] ]

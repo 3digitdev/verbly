@@ -1,8 +1,8 @@
-module Api exposing (..)
+module Api exposing (ResponseObject, get, Endpoint(..), RandomVerbData, errorToString, decodeRandomVerbData, GetResponseObjectResult, GetRandomVerbDataResult, decodeResponseObject)
 
 import Dict exposing (Dict)
 import Http
-import Json.Decode as JD exposing (Decoder, dict, list, string)
+import Json.Decode as JD exposing (dict, list, string)
 
 
 type alias ResponseObject =
@@ -39,6 +39,7 @@ type Endpoint
 -- TODO: Build an "api endpoint builder" to replace the `api` function
 
 
+urlBase : String
 urlBase =
     "http://localhost:5000"
 
@@ -83,12 +84,12 @@ get endpoint decoder cmd =
         }
 
 
-getWithDecoder : Endpoint -> JD.Decoder a -> (Result Http.Error a -> msg) -> Cmd msg
-getWithDecoder endpoint decoder cmd =
-    Http.get
-        { url = urlBuilder endpoint
-        , expect = Http.expectJson cmd decoder
-        }
+--getWithDecoder : Endpoint -> JD.Decoder a -> (Result Http.Error a -> msg) -> Cmd msg
+--getWithDecoder endpoint decoder cmd =
+--    Http.get
+--        { url = urlBuilder endpoint
+--        , expect = Http.expectJson cmd decoder
+--        }
 
 
 errorToString : Http.Error -> String -> String
@@ -100,7 +101,7 @@ errorToString err verb =
         Http.NetworkError ->
             "Network error"
 
-        Http.BadStatus resp ->
+        Http.BadStatus _ ->
             "No verb matches '" ++ verb ++ "'"
 
         Http.BadBody text ->
