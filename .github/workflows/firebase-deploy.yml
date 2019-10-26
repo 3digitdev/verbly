@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@master
+      - name: Setup Elm environment
+        uses: JorelAli/setup-elm@v1
       - name: Build
         run: elm make src/elm/practice/TimeAttack.elm --optimize --output=public/timeAttack.js
       - name: Archive Production Artifact
