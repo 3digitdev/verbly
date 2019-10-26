@@ -1,6 +1,5 @@
 module Translate exposing (main)
 
-
 import Api
 import Browser
 import Dict exposing (Dict)
@@ -76,7 +75,6 @@ update msg model =
 
         GetVerbFromConjugation ->
             ( model, getVerbFromConjugation model.searchTerm )
-
 
 
 

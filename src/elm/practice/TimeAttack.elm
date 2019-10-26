@@ -224,17 +224,6 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
     let
-        --( btnState, btnClass ) =
-        --    case model.state of
-        --        Paused ->
-        --            ( "Start", "-show" )
-
-        --        Running ->
-        --            ( "Stop", "-show" )
-
-        --        Finished ->
-        --            ( "Restart", "" )
-
         header =
             case model.currentVerb of
                 Resp val ->
@@ -255,30 +244,67 @@ view model =
             ]
             []
         , renderNavBar model
-        , Html.div [ Attributes.class "sidebar-container" ]
-            [ Html.div [] [ Html.h3 [ Attributes.class "noBtMrgn" ] [ Html.text "Timer" ] ]
-            , Html.div
-                []
-                [ Html.h1 [ Attributes.class "timer-text" ] [ Html.text (fromInt (ceiling (toFloat model.timeRemaining / 1000))) ] ]
-            , Html.div
-                []
-                [ Html.div []
-                    [ Html.h1 [ Attributes.class "score-text green-text darken-2" ] [ Html.text ("Right: " ++ fromInt model.correctAnswers) ]
-                    , Html.h1 [ Attributes.class "score-text red-text darken-2" ] [ Html.text ("Wrong: " ++ fromInt model.wrongAnswers) ]
-                    ]
+        , renderInfoBar model
+        , Html.div
+            [ Attributes.class "header-container" ]
+            [ Html.div
+                [ Attributes.class "subject-container center-block" ]
+                [ Html.h1
+                    [ Attributes.class "center" ]
+                    [ Html.text header ]
                 ]
             ]
-        , Html.div [ Attributes.class "header-container" ]
-            [ Html.div [ Attributes.class "subject-container center-block" ] [ Html.h1 [ Attributes.class "center" ] [ Html.text header ] ] ]
         , Html.div
             [ Attributes.class "container center-block" ]
             [ renderOutput model ]
         ]
 
 
-timeToSeconds : Int -> String
-timeToSeconds ms =
-    fromInt (ceiling (toFloat ms / 1000))
+renderNavBar : Model -> Html Msg
+renderNavBar model =
+    Html.nav []
+        [ Html.div
+            [ Attributes.class "nav-wrapper indigo" ]
+            [ Html.a [ Attributes.href "#", Attributes.class "brand-logo center" ]
+                [ Html.text "Verbly" ]
+            , Html.ul
+                [ Attributes.class "left" ]
+                [ Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Practice" ] ]
+                , Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Translate" ] ]
+                ]
+            ]
+        ]
+
+
+renderInfoBar : Model -> Html Msg
+renderInfoBar model =
+    Html.div
+        [ Attributes.class "sidebar-container" ]
+        [ Html.div
+            []
+            [ Html.h3
+                [ Attributes.class "noBtMrgn" ]
+                [ Html.text "Timer" ]
+            ]
+        , Html.div
+            []
+            [ Html.h1
+                [ Attributes.class "timer-text" ]
+                [ Html.text (fromInt (ceiling (toFloat model.timeRemaining / 1000))) ]
+            ]
+        , Html.div
+            []
+            [ Html.div
+                []
+                [ Html.h1
+                    [ Attributes.class "score-text green-text darken-2" ]
+                    [ Html.text ("Right: " ++ fromInt model.correctAnswers) ]
+                , Html.h1
+                    [ Attributes.class "score-text red-text darken-2" ]
+                    [ Html.text ("Wrong: " ++ fromInt model.wrongAnswers) ]
+                ]
+            ]
+        ]
 
 
 renderOutput : Model -> Html Msg
@@ -308,6 +334,28 @@ renderQuestion model randomVerbData =
             :: List.indexedMap (renderAnswer model) randomVerbData.options
         )
     ]
+
+
+renderAnswer : Model -> Int -> String -> Html Msg
+renderAnswer model index answer =
+    let
+        msg =
+            case model.guessResult of
+                Waiting ->
+                    SelectAnswer
+
+                _ ->
+                    DisableClick
+    in
+    Html.li [ Attributes.class ("collection-item" ++ getResultClass model index) ]
+        [ Html.div
+            [ Attributes.class "answer-container", Events.onClick (msg index) ]
+            [ Html.i [ Attributes.class "medium material-icons answer-num" ] [ Html.text ("looks_" ++ iconIndex (index + 1)) ]
+            , Html.div [ Attributes.class "answer center" ]
+                [ Html.h4 [] [ Html.text answer ]
+                ]
+            ]
+        ]
 
 
 getResultClass : Model -> Int -> String
@@ -343,28 +391,6 @@ getResultClass model idx =
                 ""
 
 
-renderAnswer : Model -> Int -> String -> Html Msg
-renderAnswer model index answer =
-    let
-        msg =
-            case model.guessResult of
-                Waiting ->
-                    SelectAnswer
-
-                _ ->
-                    DisableClick
-    in
-    Html.li [ Attributes.class ("collection-item" ++ getResultClass model index) ]
-        [ Html.div
-            [ Attributes.class "answer-container", Events.onClick (msg index) ]
-            [ Html.i [ Attributes.class "medium material-icons answer-num" ] [ Html.text ("looks_" ++ iconIndex (index + 1)) ]
-            , Html.div [ Attributes.class "answer center" ]
-                [ Html.h4 [] [ Html.text answer ]
-                ]
-            ]
-        ]
-
-
 iconIndex : Int -> String
 iconIndex idx =
     case idx of
@@ -376,23 +402,3 @@ iconIndex idx =
 
         _ ->
             fromInt idx
-
-
-
-{- Nav Bar -}
-
-
-renderNavBar : Model -> Html Msg
-renderNavBar model =
-    Html.nav []
-        [ Html.div
-            [ Attributes.class "nav-wrapper indigo" ]
-            [ Html.a [ Attributes.href "#", Attributes.class "brand-logo center" ]
-                [ Html.text "Verbly" ]
-            , Html.ul
-                [ Attributes.class "left" ]
-                [ Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Practice" ] ]
-                , Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Translate" ] ]
-                ]
-            ]
-        ]

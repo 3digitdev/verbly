@@ -1,4 +1,14 @@
-module Api exposing (ResponseObject, get, Endpoint(..), RandomVerbData, errorToString, decodeRandomVerbData, GetResponseObjectResult, GetRandomVerbDataResult, decodeResponseObject)
+module Api exposing
+    ( Endpoint(..)
+    , GetRandomVerbDataResult
+    , GetResponseObjectResult
+    , RandomVerbData
+    , ResponseObject
+    , decodeRandomVerbData
+    , decodeResponseObject
+    , errorToString
+    , get
+    )
 
 import Dict exposing (Dict)
 import Http
@@ -9,6 +19,10 @@ type alias ResponseObject =
     List (Dict String (List String))
 
 
+type alias GetResponseObjectResult =
+    Result Http.Error ResponseObject
+
+
 type alias RandomVerbData =
     { verb : String
     , subject : String
@@ -17,10 +31,6 @@ type alias RandomVerbData =
     , rightIndex : Int
     , options : List String
     }
-
-
-type alias GetResponseObjectResult =
-    Result Http.Error ResponseObject
 
 
 type alias GetRandomVerbDataResult =
@@ -36,7 +46,6 @@ type Endpoint
 
 
 {- Helper Functions for API Interface -}
--- TODO: Build an "api endpoint builder" to replace the `api` function
 
 
 urlBase : String
@@ -82,14 +91,6 @@ get endpoint decoder cmd =
         { url = urlBuilder endpoint
         , expect = Http.expectJson cmd decoder
         }
-
-
---getWithDecoder : Endpoint -> JD.Decoder a -> (Result Http.Error a -> msg) -> Cmd msg
---getWithDecoder endpoint decoder cmd =
---    Http.get
---        { url = urlBuilder endpoint
---        , expect = Http.expectJson cmd decoder
---        }
 
 
 errorToString : Http.Error -> String -> String
