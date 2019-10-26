@@ -31,11 +31,9 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: public
-      - name: Test
-        run: echo ${{ secrets.FIREBASE_TOKEN }}
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --project=default --token "${{ secrets.FIREBASE_TOKEN }}"
+          args: deploy --project verbly-3dd
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
