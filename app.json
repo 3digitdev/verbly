@@ -1,5 +1,5 @@
 {
-   "name": "TodoMVC in Elm",
+   "name": "Verbly",
    "repository": "https://github.com/3digitdev/verbly",
    "env": {
        "ELM_COMPILE": "elm make src/elm/practice/TimeAttack.elm --output elm.js"
