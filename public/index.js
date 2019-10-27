@@ -4841,73 +4841,75 @@ var elm$html$Html$Attributes$href = function (url) {
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
-var author$project$Components$renderNavBar = A2(
-	elm$html$Html$nav,
-	_List_Nil,
-	_List_fromArray(
-		[
-			A2(
-			elm$html$Html$div,
-			_List_fromArray(
-				[
-					elm$html$Html$Attributes$class('nav-wrapper indigo')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					elm$html$Html$a,
-					_List_fromArray(
-						[
-							elm$html$Html$Attributes$href('#'),
-							elm$html$Html$Attributes$class('brand-logo center')
-						]),
-					_List_fromArray(
-						[
-							elm$html$Html$text('Verbly')
-						])),
-					A2(
-					elm$html$Html$ul,
-					_List_fromArray(
-						[
-							elm$html$Html$Attributes$class('left')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							elm$html$Html$li,
-							_List_Nil,
-							_List_fromArray(
-								[
-									A2(
-									elm$html$Html$a,
-									_List_fromArray(
-										[
-											elm$html$Html$Attributes$href('/TimeAttack')
-										]),
-									_List_fromArray(
-										[
-											elm$html$Html$text('Time Attack')
-										]))
-								])),
-							A2(
-							elm$html$Html$li,
-							_List_Nil,
-							_List_fromArray(
-								[
-									A2(
-									elm$html$Html$a,
-									_List_fromArray(
-										[
-											elm$html$Html$Attributes$href('/Translate')
-										]),
-									_List_fromArray(
-										[
-											elm$html$Html$text('Translate')
-										]))
-								]))
-						]))
-				]))
-		]));
+var author$project$Components$renderNavBar = function (pathPrefix) {
+	return A2(
+		elm$html$Html$nav,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$div,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$class('nav-wrapper indigo')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$a,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$href(pathPrefix + '/'),
+								elm$html$Html$Attributes$class('brand-logo center')
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text('Verbly')
+							])),
+						A2(
+						elm$html$Html$ul,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('left')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								elm$html$Html$li,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$a,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$href(pathPrefix + '/TimeAttack')
+											]),
+										_List_fromArray(
+											[
+												elm$html$Html$text('Time Attack')
+											]))
+									])),
+								A2(
+								elm$html$Html$li,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$a,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$href(pathPrefix + '/Translate')
+											]),
+										_List_fromArray(
+											[
+												elm$html$Html$text('Translate')
+											]))
+									]))
+							]))
+					]))
+			]));
+};
 var author$project$Home$renderFunctionButtons = A2(
 	elm$html$Html$div,
 	_List_fromArray(
@@ -4980,7 +4982,7 @@ var author$project$Home$view = function (model) {
 						elm$html$Html$Attributes$href('../../stylesheets/main.css')
 					]),
 				_List_Nil),
-				author$project$Components$renderNavBar,
+				author$project$Components$renderNavBar(''),
 				A2(
 				elm$html$Html$div,
 				_List_fromArray(

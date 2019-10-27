@@ -9,23 +9,23 @@ import Html.Events as Events
 {- Nav Bar Header -}
 
 
-renderNavBar : Html msg
-renderNavBar =
+renderNavBar : String -> Html msg
+renderNavBar pathPrefix =
     Html.nav []
         [ Html.div
             [ Attributes.class "nav-wrapper indigo" ]
-            [ Html.a [ Attributes.href "/", Attributes.class "brand-logo center" ]
+            [ Html.a [ Attributes.href (pathPrefix ++ "/"), Attributes.class "brand-logo center" ]
                 [ Html.text "Verbly" ]
             , Html.ul
                 [ Attributes.class "left" ]
                 [ Html.li []
                     [ Html.a
-                        [ Attributes.href "/TimeAttack" ]
+                        [ Attributes.href (pathPrefix ++ "/TimeAttack") ]
                         [ Html.text "Time Attack" ]
                     ]
                 , Html.li []
                     [ Html.a
-                        [ Attributes.href "/Translate" ]
+                        [ Attributes.href (pathPrefix ++ "/Translate") ]
                         [ Html.text "Translate" ]
                     ]
                 ]

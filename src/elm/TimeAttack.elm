@@ -244,7 +244,7 @@ view model =
             , Attributes.href "../../../stylesheets/main.css"
             ]
             []
-        , Components.renderNavBar
+        , Components.renderNavBar ".."
         , renderInfoBar model
         , Html.div
             [ Attributes.class "header-container" ]

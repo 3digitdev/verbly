@@ -71,7 +71,7 @@ view model =
             , Attributes.href "../../stylesheets/main.css"
             ]
             []
-        , Components.renderNavBar
+        , Components.renderNavBar ""
         , Html.div
             [ Attributes.class "header-container" ]
             [ Html.div

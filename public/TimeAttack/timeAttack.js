@@ -6480,11 +6480,13 @@ var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 			return 3;
 	}
 };
+var elm$html$Html$a = _VirtualDom_node('a');
 var elm$html$Html$div = _VirtualDom_node('div');
-var elm$html$Html$h1 = _VirtualDom_node('h1');
-var elm$html$Html$h3 = _VirtualDom_node('h3');
+var elm$html$Html$li = _VirtualDom_node('li');
+var elm$html$Html$nav = _VirtualDom_node('nav');
 var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
+var elm$html$Html$ul = _VirtualDom_node('ul');
 var elm$json$Json$Encode$string = _Json_wrap;
 var elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
@@ -6494,6 +6496,83 @@ var elm$html$Html$Attributes$stringProperty = F2(
 			elm$json$Json$Encode$string(string));
 	});
 var elm$html$Html$Attributes$class = elm$html$Html$Attributes$stringProperty('className');
+var elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
+var author$project$Components$renderNavBar = function (pathPrefix) {
+	return A2(
+		elm$html$Html$nav,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				elm$html$Html$div,
+				_List_fromArray(
+					[
+						elm$html$Html$Attributes$class('nav-wrapper indigo')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						elm$html$Html$a,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$href(pathPrefix + '/'),
+								elm$html$Html$Attributes$class('brand-logo center')
+							]),
+						_List_fromArray(
+							[
+								elm$html$Html$text('Verbly')
+							])),
+						A2(
+						elm$html$Html$ul,
+						_List_fromArray(
+							[
+								elm$html$Html$Attributes$class('left')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								elm$html$Html$li,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$a,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$href(pathPrefix + '/TimeAttack')
+											]),
+										_List_fromArray(
+											[
+												elm$html$Html$text('Time Attack')
+											]))
+									])),
+								A2(
+								elm$html$Html$li,
+								_List_Nil,
+								_List_fromArray(
+									[
+										A2(
+										elm$html$Html$a,
+										_List_fromArray(
+											[
+												elm$html$Html$Attributes$href(pathPrefix + '/Translate')
+											]),
+										_List_fromArray(
+											[
+												elm$html$Html$text('Translate')
+											]))
+									]))
+							]))
+					]))
+			]));
+};
+var elm$html$Html$h1 = _VirtualDom_node('h1');
+var elm$html$Html$h3 = _VirtualDom_node('h3');
 var author$project$TimeAttack$renderInfoBar = function (model) {
 	return A2(
 		elm$html$Html$div,
@@ -6568,85 +6647,6 @@ var author$project$TimeAttack$renderInfoBar = function (model) {
 									[
 										elm$html$Html$text(
 										'Wrong: ' + elm$core$String$fromInt(model.H))
-									]))
-							]))
-					]))
-			]));
-};
-var elm$html$Html$a = _VirtualDom_node('a');
-var elm$html$Html$li = _VirtualDom_node('li');
-var elm$html$Html$nav = _VirtualDom_node('nav');
-var elm$html$Html$ul = _VirtualDom_node('ul');
-var elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
-var author$project$TimeAttack$renderNavBar = function (model) {
-	return A2(
-		elm$html$Html$nav,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				elm$html$Html$div,
-				_List_fromArray(
-					[
-						elm$html$Html$Attributes$class('nav-wrapper indigo')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						elm$html$Html$a,
-						_List_fromArray(
-							[
-								elm$html$Html$Attributes$href('#'),
-								elm$html$Html$Attributes$class('brand-logo center')
-							]),
-						_List_fromArray(
-							[
-								elm$html$Html$text('Verbly')
-							])),
-						A2(
-						elm$html$Html$ul,
-						_List_fromArray(
-							[
-								elm$html$Html$Attributes$class('left')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								elm$html$Html$li,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										elm$html$Html$a,
-										_List_fromArray(
-											[
-												elm$html$Html$Attributes$href('#')
-											]),
-										_List_fromArray(
-											[
-												elm$html$Html$text('Practice')
-											]))
-									])),
-								A2(
-								elm$html$Html$li,
-								_List_Nil,
-								_List_fromArray(
-									[
-										A2(
-										elm$html$Html$a,
-										_List_fromArray(
-											[
-												elm$html$Html$Attributes$href('#')
-											]),
-										_List_fromArray(
-											[
-												elm$html$Html$text('Translate')
-											]))
 									]))
 							]))
 					]))
@@ -6867,7 +6867,7 @@ var author$project$TimeAttack$view = function (model) {
 						elm$html$Html$Attributes$href('../../../stylesheets/main.css')
 					]),
 				_List_Nil),
-				author$project$TimeAttack$renderNavBar(model),
+				author$project$Components$renderNavBar('..'),
 				author$project$TimeAttack$renderInfoBar(model),
 				A2(
 				elm$html$Html$div,
