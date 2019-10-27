@@ -141,7 +141,7 @@ view model =
             , Attributes.href "../../stylesheets/main.css"
             ]
             []
-        , Components.renderNavBar ".."
+        , Components.renderNavBar
         , renderSearchBar model
         , Html.div
             [ Attributes.class "container center-block" ]
