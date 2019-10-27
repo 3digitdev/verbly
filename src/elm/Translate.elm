@@ -175,7 +175,7 @@ renderSearchBar model =
             ]
             [ Html.text "Conjugate" ]
         , Html.button
-            [ Attributes.class "btn-large lime darken-2 search-btn"
+            [ Attributes.class "btn-large lime darken-2 search-btn-show"
             , Events.onClick GetVerbFromConjugation
             ]
             [ Html.text "Unconjugate" ]
