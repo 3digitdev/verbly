@@ -16,9 +16,9 @@ jobs:
       - name: Build Homepage
         run: elm make src/elm/Home.elm --optimize --output=public/index.js
       - name: Build Time Attack
-        run: elm make src/elm/TimeAttack.elm --optimize --output=public/TimeAttack/timeAttack.js
+        run: elm make src/elm/TimeAttack.elm --optimize --output=public/timeAttack.js
       - name: Build Translate
-        run: elm make src/elm/Translate.elm --optimize --output=public/Translate/translate.js
+        run: elm make src/elm/Translate.elm --optimize --output=public/translate.js
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
