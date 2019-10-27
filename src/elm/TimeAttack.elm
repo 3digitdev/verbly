@@ -2,6 +2,7 @@ module TimeAttack exposing (main)
 
 import Api
 import Browser
+import Components
 import Delay exposing (TimeUnit(..), after)
 import Html exposing (Html)
 import Html.Attributes as Attributes
@@ -243,7 +244,7 @@ view model =
             , Attributes.href "../../../stylesheets/main.css"
             ]
             []
-        , renderNavBar model
+        , Components.renderNavBar
         , renderInfoBar model
         , Html.div
             [ Attributes.class "header-container" ]
@@ -257,22 +258,6 @@ view model =
         , Html.div
             [ Attributes.class "container center-block" ]
             [ renderOutput model ]
-        ]
-
-
-renderNavBar : Model -> Html Msg
-renderNavBar model =
-    Html.nav []
-        [ Html.div
-            [ Attributes.class "nav-wrapper indigo" ]
-            [ Html.a [ Attributes.href "#", Attributes.class "brand-logo center" ]
-                [ Html.text "Verbly" ]
-            , Html.ul
-                [ Attributes.class "left" ]
-                [ Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Practice" ] ]
-                , Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Translate" ] ]
-                ]
-            ]
         ]
 
 

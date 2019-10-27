@@ -2,6 +2,7 @@ module Translate exposing (main)
 
 import Api
 import Browser
+import Components
 import Dict exposing (Dict)
 import Html exposing (Html)
 import Html.Attributes as Attributes
@@ -140,7 +141,7 @@ view model =
             , Attributes.href "../../stylesheets/main.css"
             ]
             []
-        , renderNavBar
+        , Components.renderNavBar
         , renderSearchBar model
         , Html.div
             [ Attributes.class "container center-block" ]
@@ -148,26 +149,6 @@ view model =
                 [ Attributes.class "center-block" ]
                 [ renderErrors model
                 , renderOutput model
-                ]
-            ]
-        ]
-
-
-
-{- Nav Bar -}
-
-
-renderNavBar : Html Msg
-renderNavBar =
-    Html.nav []
-        [ Html.div
-            [ Attributes.class "nav-wrapper indigo" ]
-            [ Html.a [ Attributes.href "#", Attributes.class "brand-logo center" ]
-                [ Html.text "Verbly" ]
-            , Html.ul
-                [ Attributes.class "left" ]
-                [ Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Practice" ] ]
-                , Html.li [] [ Html.a [ Attributes.href "#" ] [ Html.text "Translate" ] ]
                 ]
             ]
         ]
