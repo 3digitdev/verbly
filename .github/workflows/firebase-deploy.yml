@@ -14,7 +14,7 @@ jobs:
       - name: Setup Elm environment
         uses: JorelAli/setup-elm@v1
       - name: Build Homepage
-        run: elm make src/elm/Home.elm --optimize --output=public/index.js
+        run: elm make src/elm/Home.elm --optimize --output=public/home.js
       - name: Build Time Attack
         run: elm make src/elm/TimeAttack.elm --optimize --output=public/timeAttack.js
       - name: Build Translate
