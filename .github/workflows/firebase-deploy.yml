@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@master
       - name: Setup Elm environment
         uses: JorelAli/setup-elm@v1
+        with:
+          elm-version: 0.19.1
       - name: Build Homepage
         run: elm make src/elm/Home.elm --optimize --output=public/home.js
       - name: Build Time Attack
