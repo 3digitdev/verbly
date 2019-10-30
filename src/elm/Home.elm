@@ -95,13 +95,13 @@ renderFunctionButtons =
         [ Html.div
             [ Attributes.class "col s4 push-s2" ]
             [ Html.a
-                [ Attributes.href "/TimeAttack", Attributes.class "btn-large indigo white-text" ]
+                [ Attributes.href "/TimeAttack.html", Attributes.class "btn-large indigo white-text" ]
                 [ Html.text "Time Attack" ]
             ]
         , Html.div
             [ Attributes.class "col s4 push-s3" ]
             [ Html.a
-                [ Attributes.href "/Translate", Attributes.class "btn-large indigo white-text" ]
+                [ Attributes.href "/Translate.html", Attributes.class "btn-large indigo white-text" ]
                 [ Html.text "Translate" ]
             ]
         ]

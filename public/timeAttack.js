@@ -6807,7 +6807,7 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('TimeAttack.html')
+												$elm$html$Html$Attributes$href('/TimeAttack.html')
 											]),
 										_List_fromArray(
 											[
@@ -6826,7 +6826,7 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('Translate.html')
+												$elm$html$Html$Attributes$href('/Translate.html')
 											]),
 										_List_fromArray(
 											[

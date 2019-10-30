@@ -32,12 +32,12 @@ renderNavBar active =
                 [ Attributes.class "left" ]
                 [ Html.li [ Attributes.class taClass ]
                     [ Html.a
-                        [ Attributes.href "/TimeAttack" ]
+                        [ Attributes.href "/TimeAttack.html" ]
                         [ Html.text "Time Attack" ]
                     ]
                 , Html.li [ Attributes.class trClass ]
                     [ Html.a
-                        [ Attributes.href "/Translate" ]
+                        [ Attributes.href "/Translate.html" ]
                         [ Html.text "Translate" ]
                     ]
                 ]
