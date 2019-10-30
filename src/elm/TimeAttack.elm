@@ -244,69 +244,109 @@ view model =
             , Attributes.href "../../../stylesheets/main.css"
             ]
             []
-        , Components.renderNavBar
-        , renderInfoBar model
-        , Html.div
-            [ Attributes.class "header-container" ]
-            [ Html.div
-                [ Attributes.class "subject-container center-block" ]
-                [ Html.h1
-                    [ Attributes.class "center" ]
-                    [ Html.text header ]
-                ]
+        , Html.header
+            []
+            [ Components.renderNavBar "TimeAttack"
+            , renderInfoBar model
             ]
-        , Html.div
-            [ Attributes.class "container center-block" ]
-            [ renderOutput model ]
+        , Html.main_
+            []
+            [ Html.div
+                [ Attributes.class "header-container" ]
+                [ Html.div
+                    [ Attributes.class "subject-container center-block" ]
+                    [ Html.h1
+                        [ Attributes.class "center" ]
+                        [ Html.text header ]
+                    ]
+                ]
+            , Html.div
+                [ Attributes.class "container center-block" ]
+                [ renderOutput model ]
+            ]
         ]
 
 
 renderInfoBar : Model -> Html Msg
 renderInfoBar model =
+    let
+        midContent =
+            case model.currentVerb of
+                Resp val ->
+                    []
+
+                Empty ->
+                    [ Html.button
+                        [ Attributes.class "btn-large orange darken-3 xl-button"
+                        , Events.onClick Reset
+                        ]
+                        [ Html.text "Restart" ]
+                    ]
+    in
     Html.div
-        [ Attributes.class "sidebar-container" ]
+        [ Attributes.class "row indigo lighten-2 white-text" ]
         [ Html.div
-            []
+            [ Attributes.class "col s5 right-align" ]
             [ Html.h3
-                [ Attributes.class "noBtMrgn" ]
-                [ Html.text "Timer" ]
-            ]
-        , Html.div
-            []
-            [ Html.h1
-                [ Attributes.class "timer-text" ]
-                [ Html.text (fromInt (ceiling (toFloat model.timeRemaining / 1000))) ]
-            ]
-        , Html.div
-            []
-            [ Html.div
                 []
-                [ Html.h1
-                    [ Attributes.class "score-text green-text darken-2" ]
-                    [ Html.text ("Right: " ++ fromInt model.correctAnswers) ]
-                , Html.h1
-                    [ Attributes.class "score-text red-text darken-2" ]
-                    [ Html.text ("Wrong: " ++ fromInt model.wrongAnswers) ]
+                [ Html.text ("Timer: " ++ toTimeFormat (ceiling (toFloat model.timeRemaining / 1000))) ]
+            ]
+        , Html.div
+            [ Attributes.class "col s2 center-align" ]
+            midContent
+        , Html.div
+            [ Attributes.class "col s5 left-align" ]
+            [ Html.h3
+                []
+                [ Html.text
+                    ("Score:  "
+                        ++ fromInt model.correctAnswers
+                        ++ " / "
+                        ++ fromInt (model.correctAnswers + model.wrongAnswers)
+                    )
                 ]
             ]
         ]
+
+
+toTimeFormat : Int -> String
+toTimeFormat time =
+    let
+        minutes =
+            time // 60
+
+        minuteStr =
+            if minutes < 10 then
+                "0" ++ fromInt minutes
+
+            else
+                fromInt minutes
+
+        seconds =
+            time |> modBy 60
+
+        secondStr =
+            if seconds < 10 then
+                "0" ++ fromInt seconds
+
+            else
+                fromInt seconds
+    in
+    minuteStr ++ ":" ++ secondStr
 
 
 renderOutput : Model -> Html Msg
 renderOutput model =
     case model.currentVerb of
         Resp val ->
-            Html.div [ Attributes.class "content-container" ]
+            Html.div
+                [ Attributes.class "content-container" ]
                 (renderQuestion model val)
 
         Empty ->
-            Html.div [ Attributes.class "content-container" ]
-                [ Html.button
-                    [ Attributes.class "waves-effect waves-light btn-large xl-button orange darken-3"
-                    , Events.onClick Reset
-                    ]
-                    [ Html.text "Restart" ]
-                ]
+            Html.div
+                [ Attributes.class "content-container" ]
+                []
 
 
 renderQuestion : Model -> Api.RandomVerbData -> List (Html Msg)

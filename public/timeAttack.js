@@ -2659,7 +2659,7 @@ var _VirtualDom_mapEventTuple = F2(function(func, tuple)
 var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
-		l: func(record.l),
+		m: func(record.m),
 		Z: record.Z,
 		V: record.V
 	}
@@ -2929,7 +2929,7 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 		// 3 = Custom
 
 		var value = result.a;
-		var message = !tag ? value : tag < 3 ? value.a : value.l;
+		var message = !tag ? value : tag < 3 ? value.a : value.m;
 		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Z;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
@@ -6222,7 +6222,7 @@ var $author$project$TimeAttack$Paused = 0;
 var $elm$core$Basics$negate = function (n) {
 	return -n;
 };
-var $author$project$TimeAttack$initModel = {o: 0, f: $author$project$TimeAttack$Empty, S: '', J: -1, u: 0, i: 0, z: 10000, C: 0};
+var $author$project$TimeAttack$initModel = {l: 0, f: $author$project$TimeAttack$Empty, S: '', J: -1, u: 0, i: 0, z: 10000, C: 0};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$TimeAttack$Running = 1;
@@ -6265,7 +6265,7 @@ var $author$project$TimeAttack$validateGuess = F2(
 		var wrong = _v0.b;
 		return _Utils_update(
 			model,
-			{o: model.o + correct, J: guessIdx, u: result, i: 1, C: model.C + wrong});
+			{l: model.l + correct, J: guessIdx, u: result, i: 1, C: model.C + wrong});
 	});
 var $author$project$TimeAttack$init = function (_v3) {
 	return A2($author$project$TimeAttack$update, $author$project$TimeAttack$GetNextVerb, $author$project$TimeAttack$initModel);
@@ -6626,173 +6626,23 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$header = _VirtualDom_node('header');
 var $elm$html$Html$Attributes$href = function (url) {
 	return A2(
 		$elm$html$Html$Attributes$stringProperty,
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
+var $elm$html$Html$main_ = _VirtualDom_node('main');
 var $elm$virtual_dom$VirtualDom$node = function (tag) {
 	return _VirtualDom_node(
 		_VirtualDom_noScript(tag));
 };
 var $elm$html$Html$node = $elm$virtual_dom$VirtualDom$node;
 var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
-var $elm$html$Html$h3 = _VirtualDom_node('h3');
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$TimeAttack$renderInfoBar = function (model) {
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('sidebar-container')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$h3,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('noBtMrgn')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text('Timer')
-							]))
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$h1,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('timer-text')
-							]),
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								$elm$core$String$fromInt(
-									$elm$core$Basics$ceiling(model.z / 1000)))
-							]))
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$div,
-						_List_Nil,
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$h1,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('score-text green-text darken-2')
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										'Right: ' + $elm$core$String$fromInt(model.o))
-									])),
-								A2(
-								$elm$html$Html$h1,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('score-text red-text darken-2')
-									]),
-								_List_fromArray(
-									[
-										$elm$html$Html$text(
-										'Wrong: ' + $elm$core$String$fromInt(model.C))
-									]))
-							]))
-					]))
-			]));
-};
-var $elm$html$Html$a = _VirtualDom_node('a');
-var $elm$html$Html$li = _VirtualDom_node('li');
-var $elm$html$Html$nav = _VirtualDom_node('nav');
-var $elm$html$Html$ul = _VirtualDom_node('ul');
-var $author$project$Components$renderNavBar = A2(
-	$elm$html$Html$nav,
-	_List_Nil,
-	_List_fromArray(
-		[
-			A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('nav-wrapper indigo')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$a,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$href('/'),
-							$elm$html$Html$Attributes$class('brand-logo center')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Verbly')
-						])),
-					A2(
-					$elm$html$Html$ul,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('left')
-						]),
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$li,
-							_List_Nil,
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$a,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$href('TimeAttack.html')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Time Attack')
-										]))
-								])),
-							A2(
-							$elm$html$Html$li,
-							_List_Nil,
-							_List_fromArray(
-								[
-									A2(
-									$elm$html$Html$a,
-									_List_fromArray(
-										[
-											$elm$html$Html$Attributes$href('Translate.html')
-										]),
-									_List_fromArray(
-										[
-											$elm$html$Html$text('Translate')
-										]))
-								]))
-						]))
-				]))
-		]));
 var $author$project$TimeAttack$Reset = {$: 3};
 var $elm$html$Html$button = _VirtualDom_node('button');
+var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
 };
@@ -6809,6 +6659,183 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		$elm$html$Html$Events$on,
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
+};
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$core$Basics$modBy = _Basics_modBy;
+var $author$project$TimeAttack$toTimeFormat = function (time) {
+	var seconds = A2($elm$core$Basics$modBy, 60, time);
+	var secondStr = (seconds < 10) ? ('0' + $elm$core$String$fromInt(seconds)) : $elm$core$String$fromInt(seconds);
+	var minutes = (time / 60) | 0;
+	var minuteStr = (minutes < 10) ? ('0' + $elm$core$String$fromInt(minutes)) : $elm$core$String$fromInt(minutes);
+	return minuteStr + (':' + secondStr);
+};
+var $author$project$TimeAttack$renderInfoBar = function (model) {
+	var midContent = function () {
+		var _v0 = model.f;
+		if (!_v0.$) {
+			var val = _v0.a;
+			return _List_Nil;
+		} else {
+			return _List_fromArray(
+				[
+					A2(
+					$elm$html$Html$button,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('btn-large orange darken-3 xl-button'),
+							$elm$html$Html$Events$onClick($author$project$TimeAttack$Reset)
+						]),
+					_List_fromArray(
+						[
+							$elm$html$Html$text('Restart')
+						]))
+				]);
+		}
+	}();
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('row indigo lighten-2 white-text')
+			]),
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('col s5 right-align')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$h3,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								'Timer: ' + $author$project$TimeAttack$toTimeFormat(
+									$elm$core$Basics$ceiling(model.z / 1000)))
+							]))
+					])),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('col s2 center-align')
+					]),
+				midContent),
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('col s5 left-align')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$h3,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								'Score:  ' + ($elm$core$String$fromInt(model.l) + (' / ' + $elm$core$String$fromInt(model.l + model.C))))
+							]))
+					]))
+			]));
+};
+var $elm$html$Html$a = _VirtualDom_node('a');
+var $elm$html$Html$li = _VirtualDom_node('li');
+var $elm$html$Html$nav = _VirtualDom_node('nav');
+var $elm$html$Html$ul = _VirtualDom_node('ul');
+var $author$project$Components$renderNavBar = function (active) {
+	var _v0 = function () {
+		switch (active) {
+			case 'TimeAttack':
+				return _Utils_Tuple2('active', '');
+			case 'Translate':
+				return _Utils_Tuple2('', 'active');
+			default:
+				var _default = active;
+				return _Utils_Tuple2('', '');
+		}
+	}();
+	var taClass = _v0.a;
+	var trClass = _v0.b;
+	return A2(
+		$elm$html$Html$nav,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('nav-wrapper indigo')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$a,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$href('/'),
+								$elm$html$Html$Attributes$class('brand-logo center')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Verbly')
+							])),
+						A2(
+						$elm$html$Html$ul,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('left')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$li,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class(taClass)
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$a,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$href('TimeAttack.html')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Time Attack')
+											]))
+									])),
+								A2(
+								$elm$html$Html$li,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class(trClass)
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$a,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$href('Translate.html')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text('Translate')
+											]))
+									]))
+							]))
+					]))
+			]));
 };
 var $author$project$TimeAttack$DisableClick = function (a) {
 	return {$: 1, a: a};
@@ -6960,20 +6987,7 @@ var $author$project$TimeAttack$renderOutput = function (model) {
 				[
 					$elm$html$Html$Attributes$class('content-container')
 				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$button,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$class('waves-effect waves-light btn-large xl-button orange darken-3'),
-							$elm$html$Html$Events$onClick($author$project$TimeAttack$Reset)
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Restart')
-						]))
-				]));
+			_List_Nil);
 	}
 };
 var $author$project$TimeAttack$view = function (model) {
@@ -6983,7 +6997,7 @@ var $author$project$TimeAttack$view = function (model) {
 			var val = _v0.a;
 			return val.aQ + ('  ' + val.bm);
 		} else {
-			return 'FINISHED!  You got ' + ($elm$core$String$fromInt(model.o) + (' out of ' + ($elm$core$String$fromInt(model.o + model.C) + ' correct!')));
+			return 'FINISHED!  You got ' + ($elm$core$String$fromInt(model.l) + (' out of ' + ($elm$core$String$fromInt(model.l + model.C) + ' correct!')));
 		}
 	}();
 	return A2(
@@ -7000,45 +7014,57 @@ var $author$project$TimeAttack$view = function (model) {
 						$elm$html$Html$Attributes$href('../../../stylesheets/main.css')
 					]),
 				_List_Nil),
-				$author$project$Components$renderNavBar,
-				$author$project$TimeAttack$renderInfoBar(model),
 				A2(
-				$elm$html$Html$div,
+				$elm$html$Html$header,
+				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('header-container')
-					]),
+						$author$project$Components$renderNavBar('TimeAttack'),
+						$author$project$TimeAttack$renderInfoBar(model)
+					])),
+				A2(
+				$elm$html$Html$main_,
+				_List_Nil,
 				_List_fromArray(
 					[
 						A2(
 						$elm$html$Html$div,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('subject-container center-block')
+								$elm$html$Html$Attributes$class('header-container')
 							]),
 						_List_fromArray(
 							[
 								A2(
-								$elm$html$Html$h1,
+								$elm$html$Html$div,
 								_List_fromArray(
 									[
-										$elm$html$Html$Attributes$class('center')
+										$elm$html$Html$Attributes$class('subject-container center-block')
 									]),
 								_List_fromArray(
 									[
-										$elm$html$Html$text(header)
+										A2(
+										$elm$html$Html$h1,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('center')
+											]),
+										_List_fromArray(
+											[
+												$elm$html$Html$text(header)
+											]))
 									]))
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('container center-block')
+							]),
+						_List_fromArray(
+							[
+								$author$project$TimeAttack$renderOutput(model)
 							]))
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('container center-block')
-					]),
-				_List_fromArray(
-					[
-						$author$project$TimeAttack$renderOutput(model)
 					]))
 			]));
 };

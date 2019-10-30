@@ -9,8 +9,20 @@ import Html.Events as Events
 {- Nav Bar Header -}
 
 
-renderNavBar : Html msg
-renderNavBar =
+renderNavBar : String -> Html msg
+renderNavBar active =
+    let
+        ( taClass, trClass ) =
+            case active of
+                "TimeAttack" ->
+                    ( "active", "" )
+
+                "Translate" ->
+                    ( "", "active" )
+
+                default ->
+                    ( "", "" )
+    in
     Html.nav []
         [ Html.div
             [ Attributes.class "nav-wrapper indigo" ]
@@ -18,12 +30,12 @@ renderNavBar =
                 [ Html.text "Verbly" ]
             , Html.ul
                 [ Attributes.class "left" ]
-                [ Html.li []
+                [ Html.li [ Attributes.class taClass ]
                     [ Html.a
                         [ Attributes.href "TimeAttack.html" ]
                         [ Html.text "Time Attack" ]
                     ]
-                , Html.li []
+                , Html.li [ Attributes.class trClass ]
                     [ Html.a
                         [ Attributes.href "Translate.html" ]
                         [ Html.text "Translate" ]
