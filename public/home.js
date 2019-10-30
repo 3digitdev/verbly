@@ -5288,7 +5288,7 @@ var $author$project$Home$view = function (model) {
 				_List_fromArray(
 					[
 						$elm$html$Html$Attributes$rel('stylesheet'),
-						$elm$html$Html$Attributes$href('../../stylesheets/main.css')
+						$elm$html$Html$Attributes$href('../../public/stylesheets/main.css')
 					]),
 				_List_Nil),
 				$author$project$Components$renderNavBar('Home'),

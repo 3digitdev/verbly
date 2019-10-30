@@ -68,7 +68,7 @@ view model =
         []
         [ Html.node "link"
             [ Attributes.rel "stylesheet"
-            , Attributes.href "../../stylesheets/main.css"
+            , Attributes.href "../../public/stylesheets/main.css"
             ]
             []
         , Components.renderNavBar "Home"
