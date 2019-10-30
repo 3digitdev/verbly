@@ -6627,19 +6627,7 @@ var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$header = _VirtualDom_node('header');
-var $elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
 var $elm$html$Html$main_ = _VirtualDom_node('main');
-var $elm$virtual_dom$VirtualDom$node = function (tag) {
-	return _VirtualDom_node(
-		_VirtualDom_noScript(tag));
-};
-var $elm$html$Html$node = $elm$virtual_dom$VirtualDom$node;
-var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
 var $author$project$TimeAttack$Reset = {$: 3};
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
@@ -6746,6 +6734,12 @@ var $author$project$TimeAttack$renderInfoBar = function (model) {
 			]));
 };
 var $elm$html$Html$a = _VirtualDom_node('a');
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$nav = _VirtualDom_node('nav');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
@@ -6807,7 +6801,7 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('/TimeAttack.html')
+												$elm$html$Html$Attributes$href('TimeAttack.html')
 											]),
 										_List_fromArray(
 											[
@@ -6826,7 +6820,7 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('/Translate.html')
+												$elm$html$Html$Attributes$href('Translate.html')
 											]),
 										_List_fromArray(
 											[
@@ -7005,15 +6999,6 @@ var $author$project$TimeAttack$view = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				A3(
-				$elm$html$Html$node,
-				'link',
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$rel('stylesheet'),
-						$elm$html$Html$Attributes$href('../../public/stylesheets/main.css')
-					]),
-				_List_Nil),
 				A2(
 				$elm$html$Html$header,
 				_List_Nil,

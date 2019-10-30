@@ -239,12 +239,12 @@ view model =
     in
     Html.div
         []
-        [ Html.node "link"
-            [ Attributes.rel "stylesheet"
-            , Attributes.href "../../public/stylesheets/main.css"
-            ]
-            []
-        , Html.header
+        -- [ Html.node "link"
+        --     [ Attributes.rel "stylesheet"
+        --     , Attributes.href "../../public/stylesheets/main.css"
+        --     ]
+        --     []
+        [ Html.header
             []
             [ Components.renderNavBar "TimeAttack"
             , renderInfoBar model

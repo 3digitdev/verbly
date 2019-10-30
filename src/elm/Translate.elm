@@ -136,12 +136,12 @@ view : Model -> Html Msg
 view model =
     Html.div
         []
-        [ Html.node "link"
-            [ Attributes.rel "stylesheet"
-            , Attributes.href "../../public/stylesheets/main.css"
-            ]
-            []
-        , Components.renderNavBar "Translate"
+        -- [ Html.node "link"
+        --     [ Attributes.rel "stylesheet"
+        --     , Attributes.href "../../public/stylesheets/main.css"
+        --     ]
+        --     []
+        [ Components.renderNavBar "Translate"
         , renderSearchBar model
         , Html.div
             [ Attributes.class "container center-block" ]

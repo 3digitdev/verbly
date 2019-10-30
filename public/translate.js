@@ -6209,18 +6209,6 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $elm$html$Html$Attributes$href = function (url) {
-	return A2(
-		$elm$html$Html$Attributes$stringProperty,
-		'href',
-		_VirtualDom_noJavaScriptUri(url));
-};
-var $elm$virtual_dom$VirtualDom$node = function (tag) {
-	return _VirtualDom_node(
-		_VirtualDom_noScript(tag));
-};
-var $elm$html$Html$node = $elm$virtual_dom$VirtualDom$node;
-var $elm$html$Html$Attributes$rel = _VirtualDom_attribute('rel');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
@@ -6243,6 +6231,12 @@ var $author$project$Translate$renderErrors = function (model) {
 			]));
 };
 var $elm$html$Html$a = _VirtualDom_node('a');
+var $elm$html$Html$Attributes$href = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'href',
+		_VirtualDom_noJavaScriptUri(url));
+};
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$nav = _VirtualDom_node('nav');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
@@ -6304,7 +6298,7 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('/TimeAttack.html')
+												$elm$html$Html$Attributes$href('TimeAttack.html')
 											]),
 										_List_fromArray(
 											[
@@ -6323,7 +6317,7 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('/Translate.html')
+												$elm$html$Html$Attributes$href('Translate.html')
 											]),
 										_List_fromArray(
 											[
@@ -6588,15 +6582,6 @@ var $author$project$Translate$view = function (model) {
 		_List_Nil,
 		_List_fromArray(
 			[
-				A3(
-				$elm$html$Html$node,
-				'link',
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$rel('stylesheet'),
-						$elm$html$Html$Attributes$href('../../public/stylesheets/main.css')
-					]),
-				_List_Nil),
 				$author$project$Components$renderNavBar('Translate'),
 				$author$project$Translate$renderSearchBar(model),
 				A2(
