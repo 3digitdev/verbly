@@ -6626,6 +6626,7 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$html$Html$header = _VirtualDom_node('header');
 var $elm$html$Html$main_ = _VirtualDom_node('main');
 var $author$project$TimeAttack$Reset = {$: 3};
@@ -6693,7 +6694,7 @@ var $author$project$TimeAttack$renderInfoBar = function (model) {
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('col s5 right-align')
+						$elm$html$Html$Attributes$class('col s3 m4 l5 right-align')
 					]),
 				_List_fromArray(
 					[
@@ -6711,14 +6712,14 @@ var $author$project$TimeAttack$renderInfoBar = function (model) {
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('col s2 center-align')
+						$elm$html$Html$Attributes$class('col s6 m4 l2 center-align')
 					]),
 				midContent),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('col s5 left-align')
+						$elm$html$Html$Attributes$class('col s3 m4 l5 left-align')
 					]),
 				_List_fromArray(
 					[
@@ -6740,6 +6741,7 @@ var $elm$html$Html$Attributes$href = function (url) {
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
+var $elm$html$Html$i = _VirtualDom_node('i');
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$nav = _VirtualDom_node('nav');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
@@ -6759,14 +6761,17 @@ var $author$project$Components$renderNavBar = function (active) {
 	var trClass = _v0.b;
 	return A2(
 		$elm$html$Html$nav,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('big-nav')
+			]),
 		_List_fromArray(
 			[
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('nav-wrapper indigo')
+						$elm$html$Html$Attributes$class('big-nav nav-wrapper indigo')
 					]),
 				_List_fromArray(
 					[
@@ -6775,7 +6780,7 @@ var $author$project$Components$renderNavBar = function (active) {
 						_List_fromArray(
 							[
 								$elm$html$Html$Attributes$href('/'),
-								$elm$html$Html$Attributes$class('brand-logo center')
+								$elm$html$Html$Attributes$class('app-name brand-logo left')
 							]),
 						_List_fromArray(
 							[
@@ -6785,7 +6790,7 @@ var $author$project$Components$renderNavBar = function (active) {
 						$elm$html$Html$ul,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('left')
+								$elm$html$Html$Attributes$class('right')
 							]),
 						_List_fromArray(
 							[
@@ -6801,10 +6806,21 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('TimeAttack.html')
+												$elm$html$Html$Attributes$href('TimeAttack.html'),
+												$elm$html$Html$Attributes$class('nav-text')
 											]),
 										_List_fromArray(
 											[
+												A2(
+												$elm$html$Html$i,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$class('fn-logo large material-icons left')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('access_alarm')
+													])),
 												$elm$html$Html$text('Time Attack')
 											]))
 									])),
@@ -6820,10 +6836,21 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('Translate.html')
+												$elm$html$Html$Attributes$href('Translate.html'),
+												$elm$html$Html$Attributes$class('nav-text')
 											]),
 										_List_fromArray(
 											[
+												A2(
+												$elm$html$Html$i,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$class('fn-logo large material-icons left')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('translate')
+													])),
 												$elm$html$Html$text('Translate')
 											]))
 									]))
@@ -6859,7 +6886,6 @@ var $author$project$TimeAttack$getResultClass = F2(
 		}
 	});
 var $elm$html$Html$h4 = _VirtualDom_node('h4');
-var $elm$html$Html$i = _VirtualDom_node('i');
 var $author$project$TimeAttack$iconIndex = function (idx) {
 	switch (idx) {
 		case 1:
@@ -6989,9 +7015,41 @@ var $author$project$TimeAttack$view = function (model) {
 		var _v0 = model.f;
 		if (!_v0.$) {
 			var val = _v0.a;
-			return val.aQ + ('  ' + val.bm);
+			return A2(
+				$elm$html$Html$h1,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('center')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text(val.aQ + ('  ' + val.bm))
+					]));
 		} else {
-			return 'FINISHED!  You got ' + ($elm$core$String$fromInt(model.l) + (' out of ' + ($elm$core$String$fromInt(model.l + model.C) + ' correct!')));
+			return A2(
+				$elm$html$Html$div,
+				_List_Nil,
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$h1,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('center')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text('FINISHED!')
+							])),
+						A2(
+						$elm$html$Html$h2,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text(
+								'You got ' + ($elm$core$String$fromInt(model.l) + (' out of ' + ($elm$core$String$fromInt(model.l + model.C) + ' correct!'))))
+							]))
+					]));
 		}
 	}();
 	return A2(
@@ -7027,18 +7085,7 @@ var $author$project$TimeAttack$view = function (model) {
 										$elm$html$Html$Attributes$class('subject-container center-block')
 									]),
 								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$h1,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$class('center')
-											]),
-										_List_fromArray(
-											[
-												$elm$html$Html$text(header)
-											]))
-									]))
+									[header]))
 							])),
 						A2(
 						$elm$html$Html$div,

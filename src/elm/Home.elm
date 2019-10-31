@@ -66,11 +66,6 @@ view : Model -> Html Msg
 view model =
     Html.div
         []
-        -- [ Html.node "link"
-        --     [ Attributes.rel "stylesheet"
-        --     , Attributes.href "../../public/stylesheets/main.css"
-        --     ]
-        --     []
         [ Components.renderNavBar "Home"
         , Html.div
             [ Attributes.class "header-container" ]
@@ -81,8 +76,7 @@ view model =
                     [ Html.text "Welcome To Verbly!" ]
                 , Html.h2
                     [ Attributes.class "center" ]
-                    [ Html.text "Select a function to try out!" ]
-                , renderFunctionButtons
+                    [ Html.text "Select a function above to try out" ]
                 ]
             ]
         ]

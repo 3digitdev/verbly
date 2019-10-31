@@ -1,30 +1,4 @@
-@import "materialize-0.97.7.css";
-
-.output-text {
-  white-space: pre-wrap;
-  line-height: 1.5;
-}
-
-.emoji-size {
-  font-size: 3em;
-}
-
-.key-selector {
-  display: inline-block;
-  height: 1.3em;
-  padding: 0 0.1em;
-  border-radius: 20px;
-}
-
-.key-selector:not(.is-selected):hover {
-  background-color: #4fc3f7;
-  opacity: 0.3;
-}
-
-.key-selector.is-selected {
-  background-color: #4fc3f7;
-}
-
+@import "materialize-1.0.0.css";
 
 input.search-bar {
     width: 20%;
@@ -144,4 +118,77 @@ li.answer-disabled {
 
 button.restart-btn {
     margin-top: 1rem;
+}
+
+.big-nav {
+  height: 7rem;
+}
+
+nav .nav-text {
+  line-height: 6rem;
+  font-size: 2rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+nav .app-name {
+  line-height: 6rem;
+  font-size: 5rem;
+  margin-left: 2rem;
+}
+
+nav .nav-wrapper i.fn-logo {
+  font-size: 2rem;
+  line-height: 6rem;
+}
+
+@media (pointer:coarse) {
+  ul.answers {
+    width: 75%;
+  }
+  div.answer h4 {
+    font-size: 4rem;
+  }
+  i.answer-num {
+    font-size: 6rem;
+  }
+  ul.answers li h3 {
+    font-size: 5rem;
+  }
+  div.subject-container h1 {
+    font-size: 6rem;
+  }
+  table.conj-table {
+    width: 100%;
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    /*background-color: #8080801a;*/
+    border: 1px dotted #808080;
+  }
+  table.conj-table tr, h5 {
+    font-size: 3rem;
+  }
+  div.content-container {
+    flex-direction: column;
+  }
+  div.search-container {
+    flex-flow: column;
+  }
+  input.search-bar {
+    font-size: 4rem;
+    height: 6rem;
+    padding-left: 5%;
+    width: 90%;
+    margin-left: 2.5%;
+  }
+  button.search-btn-show {
+    font-size: 3rem;
+    margin: 2rem 2rem 0 2rem;
+    height: 6rem;
+  }
+  button.xl-button {
+    width: 90%;
+    font-size: 3rem;
+    height: 4rem;
+  }
 }

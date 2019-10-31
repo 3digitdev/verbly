@@ -228,14 +228,21 @@ view model =
         header =
             case model.currentVerb of
                 Resp val ->
-                    val.englishSubject ++ "  " ++ val.verb
+                    Html.h1 [ Attributes.class "center" ] [ Html.text (val.englishSubject ++ "  " ++ val.verb) ]
 
                 Empty ->
-                    "FINISHED!  You got "
-                        ++ fromInt model.correctAnswers
-                        ++ " out of "
-                        ++ fromInt (model.correctAnswers + model.wrongAnswers)
-                        ++ " correct!"
+                    Html.div []
+                        [ Html.h1 [ Attributes.class "center" ] [ Html.text "FINISHED!" ]
+                        , Html.h2 []
+                            [ Html.text
+                                ("You got "
+                                    ++ fromInt model.correctAnswers
+                                    ++ " out of "
+                                    ++ fromInt (model.correctAnswers + model.wrongAnswers)
+                                    ++ " correct!"
+                                )
+                            ]
+                        ]
     in
     Html.div
         []
@@ -255,10 +262,7 @@ view model =
                 [ Attributes.class "header-container" ]
                 [ Html.div
                     [ Attributes.class "subject-container center-block" ]
-                    [ Html.h1
-                        [ Attributes.class "center" ]
-                        [ Html.text header ]
-                    ]
+                    [ header ]
                 ]
             , Html.div
                 [ Attributes.class "container center-block" ]
@@ -286,16 +290,16 @@ renderInfoBar model =
     Html.div
         [ Attributes.class "row indigo lighten-2 white-text" ]
         [ Html.div
-            [ Attributes.class "col s5 right-align" ]
+            [ Attributes.class "col s3 m4 l5 right-align" ]
             [ Html.h3
                 []
                 [ Html.text ("Timer: " ++ toTimeFormat (ceiling (toFloat model.timeRemaining / 1000))) ]
             ]
         , Html.div
-            [ Attributes.class "col s2 center-align" ]
+            [ Attributes.class "col s6 m4 l2 center-align" ]
             midContent
         , Html.div
-            [ Attributes.class "col s5 left-align" ]
+            [ Attributes.class "col s3 m4 l5 left-align" ]
             [ Html.h3
                 []
                 [ Html.text

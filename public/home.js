@@ -5128,59 +5128,11 @@ var $elm$html$Html$Attributes$href = function (url) {
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Home$renderFunctionButtons = A2(
-	$elm$html$Html$div,
-	_List_fromArray(
-		[
-			$elm$html$Html$Attributes$class('row')
-		]),
-	_List_fromArray(
-		[
-			A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('col s4 push-s2')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$a,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$href('TimeAttack.html'),
-							$elm$html$Html$Attributes$class('btn-large indigo white-text')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Time Attack')
-						]))
-				])),
-			A2(
-			$elm$html$Html$div,
-			_List_fromArray(
-				[
-					$elm$html$Html$Attributes$class('col s4 push-s3')
-				]),
-			_List_fromArray(
-				[
-					A2(
-					$elm$html$Html$a,
-					_List_fromArray(
-						[
-							$elm$html$Html$Attributes$href('Translate.html'),
-							$elm$html$Html$Attributes$class('btn-large indigo white-text')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Translate')
-						]))
-				]))
-		]));
+var $elm$html$Html$i = _VirtualDom_node('i');
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$nav = _VirtualDom_node('nav');
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$html$Html$ul = _VirtualDom_node('ul');
 var $author$project$Components$renderNavBar = function (active) {
 	var _v0 = function () {
@@ -5198,14 +5150,17 @@ var $author$project$Components$renderNavBar = function (active) {
 	var trClass = _v0.b;
 	return A2(
 		$elm$html$Html$nav,
-		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('big-nav')
+			]),
 		_List_fromArray(
 			[
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Attributes$class('nav-wrapper indigo')
+						$elm$html$Html$Attributes$class('big-nav nav-wrapper indigo')
 					]),
 				_List_fromArray(
 					[
@@ -5214,7 +5169,7 @@ var $author$project$Components$renderNavBar = function (active) {
 						_List_fromArray(
 							[
 								$elm$html$Html$Attributes$href('/'),
-								$elm$html$Html$Attributes$class('brand-logo center')
+								$elm$html$Html$Attributes$class('app-name brand-logo left')
 							]),
 						_List_fromArray(
 							[
@@ -5224,7 +5179,7 @@ var $author$project$Components$renderNavBar = function (active) {
 						$elm$html$Html$ul,
 						_List_fromArray(
 							[
-								$elm$html$Html$Attributes$class('left')
+								$elm$html$Html$Attributes$class('right')
 							]),
 						_List_fromArray(
 							[
@@ -5240,10 +5195,21 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('TimeAttack.html')
+												$elm$html$Html$Attributes$href('TimeAttack.html'),
+												$elm$html$Html$Attributes$class('nav-text')
 											]),
 										_List_fromArray(
 											[
+												A2(
+												$elm$html$Html$i,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$class('fn-logo large material-icons left')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('access_alarm')
+													])),
 												$elm$html$Html$text('Time Attack')
 											]))
 									])),
@@ -5259,10 +5225,21 @@ var $author$project$Components$renderNavBar = function (active) {
 										$elm$html$Html$a,
 										_List_fromArray(
 											[
-												$elm$html$Html$Attributes$href('Translate.html')
+												$elm$html$Html$Attributes$href('Translate.html'),
+												$elm$html$Html$Attributes$class('nav-text')
 											]),
 										_List_fromArray(
 											[
+												A2(
+												$elm$html$Html$i,
+												_List_fromArray(
+													[
+														$elm$html$Html$Attributes$class('fn-logo large material-icons left')
+													]),
+												_List_fromArray(
+													[
+														$elm$html$Html$text('translate')
+													])),
 												$elm$html$Html$text('Translate')
 											]))
 									]))
@@ -5311,9 +5288,8 @@ var $author$project$Home$view = function (model) {
 									]),
 								_List_fromArray(
 									[
-										$elm$html$Html$text('Select a function to try out!')
-									])),
-								$author$project$Home$renderFunctionButtons
+										$elm$html$Html$text('Select a function above to try out')
+									]))
 							]))
 					]))
 			]));

@@ -23,22 +23,26 @@ renderNavBar active =
                 default ->
                     ( "", "" )
     in
-    Html.nav []
+    Html.nav [ Attributes.class "big-nav" ]
         [ Html.div
-            [ Attributes.class "nav-wrapper indigo" ]
-            [ Html.a [ Attributes.href "/", Attributes.class "brand-logo center" ]
+            [ Attributes.class "big-nav nav-wrapper indigo" ]
+            [ Html.a [ Attributes.href "/", Attributes.class "app-name brand-logo left" ]
                 [ Html.text "Verbly" ]
             , Html.ul
-                [ Attributes.class "left" ]
+                [ Attributes.class "right" ]
                 [ Html.li [ Attributes.class taClass ]
                     [ Html.a
-                        [ Attributes.href "TimeAttack.html" ]
-                        [ Html.text "Time Attack" ]
+                        [ Attributes.href "TimeAttack.html", Attributes.class "nav-text" ]
+                        [ Html.i [ Attributes.class "fn-logo large material-icons left" ] [ Html.text "access_alarm" ]
+                        , Html.text "Time Attack"
+                        ]
                     ]
                 , Html.li [ Attributes.class trClass ]
                     [ Html.a
-                        [ Attributes.href "Translate.html" ]
-                        [ Html.text "Translate" ]
+                        [ Attributes.href "Translate.html", Attributes.class "nav-text" ]
+                        [ Html.i [ Attributes.class "fn-logo large material-icons left" ] [ Html.text "translate" ]
+                        , Html.text "Translate"
+                        ]
                     ]
                 ]
             ]

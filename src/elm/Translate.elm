@@ -170,12 +170,12 @@ renderSearchBar model =
             ]
             []
         , Html.button
-            [ Attributes.class "btn-large orange darken-3 search-btn-show"
+            [ Attributes.class "search-btn-show btn-large orange darken-3"
             , Events.onClick GetConjugation
             ]
             [ Html.text "Conjugate" ]
         , Html.button
-            [ Attributes.class "btn-large lime darken-2 search-btn-show"
+            [ Attributes.class "search-btn-show btn-large lime darken-2"
             , Events.onClick GetVerbFromConjugation
             ]
             [ Html.text "Unconjugate" ]
@@ -224,7 +224,7 @@ pullVerb verbDict =
 renderVerb : ( String, List String ) -> Html Msg
 renderVerb ( verb, conjList ) =
     Html.table
-        [ Attributes.class "striped centered conj-table" ]
+        [ Attributes.class "conj-table striped centered" ]
         [ Html.thead
             []
             [ Html.tr []
