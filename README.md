@@ -48,6 +48,6 @@ the [Jester](https://github.com/dom96/jester) framework, reading the verbs and
 conjugations from a SQLite Database.
 
 ### CI/CD
-The app runs based off of tagging this repository with Semantic Versioning (v#.#.#).
+The app runs based off of tagging this repository with Semantic Versioning (`v#.#.#`).
 
 ![Verbly CI/CD](verbly-cicd.png)
