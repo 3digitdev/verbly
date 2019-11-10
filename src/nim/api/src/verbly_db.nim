@@ -4,10 +4,13 @@ import strformat
 import sequtils
 
 const db_name = "../../../data/verbly.db"
+# Local Dev
+# const db_name = "../../../../data/verbly.db"
 
 # SQL COMMAND TEMPLATES
 const getAllEngVerbs = sql"SELECT vid, eng_translation FROM verbs"
-const getEngVerb = sql"SELECT vid, eng_translation FROM verbs WHERE eng_translation LIKE ?"
+const getEngVerbExact = sql"SELECT vid, eng_translation FROM verbs WHERE eng_translation = ?"
+const getEngVerbPartial = sql"SELECT vid, eng_translation FROM verbs WHERE eng_translation LIKE ?"
 const getEngVerbByVid = sql"SELECT vid, eng_translation FROM verbs WHERE vid = ?"
 const getVerbConj = sql"SELECT io, tu, lei, noi, voi, loro FROM present_indicative WHERE vid = ?"
 const findConjVerb = sql"SELECT vid FROM present_indicative WHERE io = ? or tu = ? or lei = ? or lui = ? or noi = ? or voi = ? or loro = ?"
@@ -16,6 +19,9 @@ const getRandVerb = sql"SELECT vid, eng_translation FROM verbs ORDER BY random()
 type VerbData = tuple
     vid: int
     verb: string
+
+proc contains[VerbData](a: seq[VerbData], b: string): bool =
+    return find(a.mapIt(it.verb), b) >= 0
 
 template withSqliteDb*(dbc, actions: untyped): untyped =
     var dbc: DbConn
@@ -33,8 +39,15 @@ proc getAllVerbs*(db: DbConn): seq[VerbData] =
         result.add((match[0].parseInt, match[1]))
 
 proc matchEnglishVerb*(db: DbConn, verb: string): seq[VerbData] =
-    for match in db.getAllRows(getEngVerb, &"%{verb}%"):
-        result.add((match[0].parseInt, match[1]))
+    # Prioritize exact matches -- let's get those first
+    for exact in db.getAllRows(getEngVerbExact, &"{verb}"):
+        result.add((exact[0].parseInt, exact[1]))
+    # Now get the partial matches
+    for partial in db.getAllRows(getEngVerbPartial, &"%{verb}%"):
+        if partial[1] in result:
+            echo &"already found {partial[1]}"
+        if not (partial[1] in result):
+            result.add((partial[0].parseInt, partial[1]))
 
 proc getVerbConjugations*(db: DbConn, vid: int): seq[string] =
     db.getRow(getVerbConj, $vid)

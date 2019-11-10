@@ -6194,7 +6194,7 @@ var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
 		{aM: $elm$http$Http$emptyBody, aR: r.aR, ak: _List_Nil, aZ: 'GET', bh: $elm$core$Maybe$Nothing, aG: $elm$core$Maybe$Nothing, bl: r.bl});
 };
-var $author$project$Api$urlBase = 'https://api-verbly.3digit.dev';
+var $author$project$Api$urlBase = 'http://0.0.0.0:7777';
 var $author$project$Api$urlBuilder = function (endpoint) {
 	switch (endpoint.$) {
 		case 0:

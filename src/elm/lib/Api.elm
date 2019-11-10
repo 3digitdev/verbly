@@ -50,6 +50,9 @@ type Endpoint
 
 urlBase : String
 urlBase =
+    -- Local Dev
+    -- "http://0.0.0.0:7777"
+    -- Server
     "https://api-verbly.3digit.dev"
 
 
