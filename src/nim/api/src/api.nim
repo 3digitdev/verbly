@@ -31,7 +31,6 @@ router verbly:
         resp(Http200, {"Access-Control-Allow-Origin":"*"}, outData.pretty)
 
 when isMainModule:
-    echo getEnv("PORT")
     let port = getEnv("PORT").parseInt().Port
     settings = newSettings(port = port)
     var server = initJester(verbly, settings=settings)
