@@ -21,7 +21,7 @@
             if ([ 49, 50, 51 ].includes(e.keyCode)) { // Top-row Number Keys 1-3
                 app.ports.keyPressed.send(e.keyCode - 49); // send 0-2
             } else if ([ 97, 98, 99 ].includes(e.keyCode)) { // Numpad Keys 1-3
-                app.ports.keyPressed.send(e.keyCode - 97); // senf 0-2
+                app.ports.keyPressed.send(e.keyCode - 97); // send 0-2
             }
         });
     </script>
