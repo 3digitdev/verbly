@@ -1,4 +1,4 @@
-module TimeAttack exposing (main)
+port module TimeAttack exposing (main)
 
 import Api
 import Browser
@@ -23,6 +23,13 @@ main =
 
 
 
+-- PORTS
+
+
+port keyPressed : (Int -> msg) -> Sub msg
+
+
+
 -- MODEL
 
 
@@ -44,7 +51,8 @@ type QueryResult
 
 
 type TimerState
-    = Paused
+    = Loading
+    | Paused
     | Running
     | Finished
 
@@ -67,7 +75,7 @@ init _ =
 initModel : Model
 initModel =
     { timeRemaining = 10000
-    , state = Paused
+    , state = Loading
     , currentVerb = Empty
     , errors = ""
     , guessResult = Waiting
@@ -79,6 +87,18 @@ initModel =
 
 
 -- UPDATE
+
+
+type Msg
+    = NoOp
+    | DisableClick Int
+    | ToggleTimer
+    | Reset
+    | Countdown Time.Posix
+    | GetNextVerb
+    | GotRandomVerb Api.GetRandomVerbDataResult
+    | SelectAnswer Int
+    | ResetQuestion
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -115,7 +135,7 @@ update msg model =
             ( { model | timeRemaining = newTime, state = state, currentVerb = verb }, Cmd.none )
 
         GetNextVerb ->
-            ( model, getVerb )
+            ( model, getVerb model )
 
         GotRandomVerb result ->
             case result of
@@ -129,12 +149,17 @@ update msg model =
             ( validateGuess model guessIdx, Delay.after 500 Millisecond ResetQuestion )
 
         ResetQuestion ->
-            ( { model | guessResult = Waiting }, getVerb )
+            ( { model | guessResult = Waiting }, getVerb model )
 
 
-getVerb : Cmd Msg
-getVerb =
-    Api.get Api.GetRandomVerb Api.decodeRandomVerbData GotRandomVerb
+getVerb : Model -> Cmd Msg
+getVerb model =
+    case model.state of
+        Finished ->
+            Cmd.none
+
+        default ->
+            Api.get Api.GetRandomVerb Api.decodeRandomVerbData GotRandomVerb
 
 
 toggleState : Model -> TimerState
@@ -189,22 +214,6 @@ validateGuess model guessIdx =
 
 
 
--- UPDATE
-
-
-type Msg
-    = NoOp
-    | DisableClick Int
-    | ToggleTimer
-    | Reset
-    | Countdown Time.Posix
-    | GetNextVerb
-    | GotRandomVerb Api.GetRandomVerbDataResult
-    | SelectAnswer Int
-    | ResetQuestion
-
-
-
 -- SUBSCRIPTIONS
 
 
@@ -212,9 +221,17 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     case model.state of
         Running ->
-            Time.every 500 Countdown
+            case model.guessResult of
+                Waiting ->
+                    Sub.batch [ keyPressed SelectAnswer, Time.every 500 Countdown ]
 
-        _ ->
+                default ->
+                    Time.every 500 Countdown
+
+        Loading ->
+            keyPressed SelectAnswer
+
+        default ->
             Sub.none
 
 
@@ -226,11 +243,8 @@ view : Model -> Html Msg
 view model =
     let
         header =
-            case model.currentVerb of
-                Resp val ->
-                    Html.h1 [ Attributes.class "center" ] [ Html.text (val.englishSubject ++ "  " ++ val.verb) ]
-
-                Empty ->
+            case model.state of
+                Finished ->
                     Html.div []
                         [ Html.h1 [ Attributes.class "center" ] [ Html.text "FINISHED!" ]
                         , Html.h2 []
@@ -243,14 +257,17 @@ view model =
                                 )
                             ]
                         ]
+
+                default ->
+                    case model.currentVerb of
+                        Resp val ->
+                            Html.h1 [ Attributes.class "center" ] [ Html.text (val.englishSubject ++ "  " ++ val.verb) ]
+
+                        Empty ->
+                            Html.h1 [ Attributes.class "center" ] [ Html.text "Loading..." ]
     in
     Html.div
         []
-        -- [ Html.node "link"
-        --     [ Attributes.rel "stylesheet"
-        --     , Attributes.href "../../public/stylesheets/main.css"
-        --     ]
-        --     []
         [ Html.header
             []
             [ Components.renderNavBar "TimeAttack"
@@ -275,17 +292,17 @@ renderInfoBar : Model -> Html Msg
 renderInfoBar model =
     let
         midContent =
-            case model.currentVerb of
-                Resp val ->
-                    []
-
-                Empty ->
+            case model.state of
+                Finished ->
                     [ Html.button
                         [ Attributes.class "btn-large orange darken-3 xl-button"
                         , Events.onClick Reset
                         ]
                         [ Html.text "Restart" ]
                     ]
+
+                default ->
+                    []
     in
     Html.div
         [ Attributes.class "row indigo lighten-2 white-text" ]
