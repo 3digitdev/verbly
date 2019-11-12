@@ -120,6 +120,11 @@ button.restart-btn {
     margin-top: 1rem;
 }
 
+i.edit-time {
+    cursor: pointer;
+    margin-left: 0.5rem;
+}
+
 .big-nav {
   height: 7rem;
 }
@@ -140,6 +145,12 @@ nav .app-name {
 nav .nav-wrapper i.fn-logo {
   font-size: 2rem;
   line-height: 6rem;
+}
+
+input[type=number].minute,input[type=number].second {
+  width: 4rem;
+  font-size: 2.5rem;
+  margin-bottom: 0;
 }
 
 @media (pointer:coarse) {

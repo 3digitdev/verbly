@@ -784,11 +784,11 @@ function _Debug_crash_UNUSED(identifier, fact1, fact2, fact3, fact4)
 
 function _Debug_regionToString(region)
 {
-	if (region.Y.E === region.ae.E)
+	if (region._.G === region.ag.G)
 	{
-		return 'on line ' + region.Y.E;
+		return 'on line ' + region._.G;
 	}
-	return 'on lines ' + region.Y.E + ' through ' + region.ae.E;
+	return 'on lines ' + region._.G + ' through ' + region.ag.G;
 }
 
 
@@ -1857,9 +1857,9 @@ var _Platform_worker = F4(function(impl, flagDecoder, debugMetadata, args)
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aX,
-		impl.bk,
-		impl.bg,
+		impl.aZ,
+		impl.bm,
+		impl.bi,
 		function() { return function() {} }
 	);
 });
@@ -2660,8 +2660,8 @@ var _VirtualDom_mapEventRecord = F2(function(func, record)
 {
 	return {
 		m: func(record.m),
-		Z: record.Z,
-		V: record.V
+		aa: record.aa,
+		X: record.X
 	}
 });
 
@@ -2930,10 +2930,10 @@ function _VirtualDom_makeCallback(eventNode, initialHandler)
 
 		var value = result.a;
 		var message = !tag ? value : tag < 3 ? value.a : value.m;
-		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.Z;
+		var stopPropagation = tag == 1 ? value.b : tag == 3 && value.aa;
 		var currentEventNode = (
 			stopPropagation && event.stopPropagation(),
-			(tag == 2 ? value.b : tag == 3 && value.V) && event.preventDefault(),
+			(tag == 2 ? value.b : tag == 3 && value.X) && event.preventDefault(),
 			eventNode
 		);
 		var tagger;
@@ -3883,11 +3883,11 @@ var _Browser_element = _Debugger_element || F4(function(impl, flagDecoder, debug
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aX,
-		impl.bk,
-		impl.bg,
+		impl.aZ,
+		impl.bm,
+		impl.bi,
 		function(sendToApp, initialModel) {
-			var view = impl.bn;
+			var view = impl.bp;
 			/**/
 			var domNode = args['node'];
 			//*/
@@ -3919,12 +3919,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 	return _Platform_initialize(
 		flagDecoder,
 		args,
-		impl.aX,
-		impl.bk,
-		impl.bg,
+		impl.aZ,
+		impl.bm,
+		impl.bi,
 		function(sendToApp, initialModel) {
-			var divertHrefToApp = impl.X && impl.X(sendToApp)
-			var view = impl.bn;
+			var divertHrefToApp = impl.Z && impl.Z(sendToApp)
+			var view = impl.bp;
 			var title = _VirtualDom_doc.title;
 			var bodyNode = _VirtualDom_doc.body;
 			var currNode = _VirtualDom_virtualize(bodyNode);
@@ -3932,12 +3932,12 @@ var _Browser_document = _Debugger_document || F4(function(impl, flagDecoder, deb
 			{
 				_VirtualDom_divertHrefToApp = divertHrefToApp;
 				var doc = view(model);
-				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aM);
+				var nextNode = _VirtualDom_node('body')(_List_Nil)(doc.aO);
 				var patches = _VirtualDom_diff(currNode, nextNode);
 				bodyNode = _VirtualDom_applyPatches(bodyNode, currNode, patches, sendToApp);
 				currNode = nextNode;
 				_VirtualDom_divertHrefToApp = 0;
-				(title !== doc.bi) && (_VirtualDom_doc.title = title = doc.bi);
+				(title !== doc.bk) && (_VirtualDom_doc.title = title = doc.bk);
 			});
 		}
 	);
@@ -3993,12 +3993,12 @@ function _Browser_makeAnimator(model, draw)
 
 function _Browser_application(impl)
 {
-	var onUrlChange = impl.a1;
-	var onUrlRequest = impl.a2;
+	var onUrlChange = impl.a3;
+	var onUrlRequest = impl.a4;
 	var key = function() { key.a(onUrlChange(_Browser_getUrl())); };
 
 	return _Browser_document({
-		X: function(sendToApp)
+		Z: function(sendToApp)
 		{
 			key.a = sendToApp;
 			_Browser_window.addEventListener('popstate', key);
@@ -4014,9 +4014,9 @@ function _Browser_application(impl)
 					var next = $elm$url$Url$fromString(href).a;
 					sendToApp(onUrlRequest(
 						(next
-							&& curr.av === next.av
-							&& curr.al === next.al
-							&& curr.as.a === next.as.a
+							&& curr.ax === next.ax
+							&& curr.an === next.an
+							&& curr.au.a === next.au.a
 						)
 							? $elm$browser$Browser$Internal(next)
 							: $elm$browser$Browser$External(href)
@@ -4024,13 +4024,13 @@ function _Browser_application(impl)
 				}
 			});
 		},
-		aX: function(flags)
+		aZ: function(flags)
 		{
-			return A3(impl.aX, flags, _Browser_getUrl(), key);
+			return A3(impl.aZ, flags, _Browser_getUrl(), key);
 		},
-		bn: impl.bn,
-		bk: impl.bk,
-		bg: impl.bg
+		bp: impl.bp,
+		bm: impl.bm,
+		bi: impl.bi
 	});
 }
 
@@ -4096,17 +4096,17 @@ var _Browser_decodeEvent = F2(function(decoder, event)
 function _Browser_visibilityInfo()
 {
 	return (typeof _VirtualDom_doc.hidden !== 'undefined')
-		? { aU: 'hidden', aO: 'visibilitychange' }
+		? { aW: 'hidden', aQ: 'visibilitychange' }
 		:
 	(typeof _VirtualDom_doc.mozHidden !== 'undefined')
-		? { aU: 'mozHidden', aO: 'mozvisibilitychange' }
+		? { aW: 'mozHidden', aQ: 'mozvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.msHidden !== 'undefined')
-		? { aU: 'msHidden', aO: 'msvisibilitychange' }
+		? { aW: 'msHidden', aQ: 'msvisibilitychange' }
 		:
 	(typeof _VirtualDom_doc.webkitHidden !== 'undefined')
-		? { aU: 'webkitHidden', aO: 'webkitvisibilitychange' }
-		: { aU: 'hidden', aO: 'visibilitychange' };
+		? { aW: 'webkitHidden', aQ: 'webkitvisibilitychange' }
+		: { aW: 'hidden', aQ: 'visibilitychange' };
 }
 
 
@@ -4187,12 +4187,12 @@ var _Browser_call = F2(function(functionName, id)
 function _Browser_getViewport()
 {
 	return {
-		aC: _Browser_getScene(),
-		aI: {
-			K: _Browser_window.pageXOffset,
-			L: _Browser_window.pageYOffset,
-			B: _Browser_doc.documentElement.clientWidth,
-			v: _Browser_doc.documentElement.clientHeight
+		aE: _Browser_getScene(),
+		aK: {
+			M: _Browser_window.pageXOffset,
+			N: _Browser_window.pageYOffset,
+			D: _Browser_doc.documentElement.clientWidth,
+			w: _Browser_doc.documentElement.clientHeight
 		}
 	};
 }
@@ -4202,8 +4202,8 @@ function _Browser_getScene()
 	var body = _Browser_doc.body;
 	var elem = _Browser_doc.documentElement;
 	return {
-		B: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
-		v: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
+		D: Math.max(body.scrollWidth, body.offsetWidth, elem.scrollWidth, elem.offsetWidth, elem.clientWidth),
+		w: Math.max(body.scrollHeight, body.offsetHeight, elem.scrollHeight, elem.offsetHeight, elem.clientHeight)
 	};
 }
 
@@ -4226,15 +4226,15 @@ function _Browser_getViewportOf(id)
 	return _Browser_withNode(id, function(node)
 	{
 		return {
-			aC: {
-				B: node.scrollWidth,
-				v: node.scrollHeight
+			aE: {
+				D: node.scrollWidth,
+				w: node.scrollHeight
 			},
-			aI: {
-				K: node.scrollLeft,
-				L: node.scrollTop,
-				B: node.clientWidth,
-				v: node.clientHeight
+			aK: {
+				M: node.scrollLeft,
+				N: node.scrollTop,
+				D: node.clientWidth,
+				w: node.clientHeight
 			}
 		};
 	});
@@ -4264,18 +4264,18 @@ function _Browser_getElement(id)
 		var x = _Browser_window.pageXOffset;
 		var y = _Browser_window.pageYOffset;
 		return {
-			aC: _Browser_getScene(),
-			aI: {
-				K: x,
-				L: y,
-				B: _Browser_doc.documentElement.clientWidth,
-				v: _Browser_doc.documentElement.clientHeight
+			aE: _Browser_getScene(),
+			aK: {
+				M: x,
+				N: y,
+				D: _Browser_doc.documentElement.clientWidth,
+				w: _Browser_doc.documentElement.clientHeight
 			},
-			aP: {
-				K: x + rect.left,
-				L: y + rect.top,
-				B: rect.width,
-				v: rect.height
+			aR: {
+				M: x + rect.left,
+				N: y + rect.top,
+				D: rect.width,
+				w: rect.height
 			}
 		};
 	});
@@ -4320,25 +4320,25 @@ var _Http_toTask = F3(function(router, toTask, request)
 	return _Scheduler_binding(function(callback)
 	{
 		function done(response) {
-			callback(toTask(request.aR.a(response)));
+			callback(toTask(request.aT.a(response)));
 		}
 
 		var xhr = new XMLHttpRequest();
 		xhr.addEventListener('error', function() { done($elm$http$Http$NetworkError_); });
 		xhr.addEventListener('timeout', function() { done($elm$http$Http$Timeout_); });
-		xhr.addEventListener('load', function() { done(_Http_toResponse(request.aR.b, xhr)); });
-		$elm$core$Maybe$isJust(request.aG) && _Http_track(router, xhr, request.aG.a);
+		xhr.addEventListener('load', function() { done(_Http_toResponse(request.aT.b, xhr)); });
+		$elm$core$Maybe$isJust(request.aI) && _Http_track(router, xhr, request.aI.a);
 
 		try {
-			xhr.open(request.aZ, request.bl, true);
+			xhr.open(request.a$, request.bn, true);
 		} catch (e) {
-			return done($elm$http$Http$BadUrl_(request.bl));
+			return done($elm$http$Http$BadUrl_(request.bn));
 		}
 
 		_Http_configureRequest(xhr, request);
 
-		request.aM.a && xhr.setRequestHeader('Content-Type', request.aM.a);
-		xhr.send(request.aM.b);
+		request.aO.a && xhr.setRequestHeader('Content-Type', request.aO.a);
+		xhr.send(request.aO.b);
 
 		return function() { xhr.c = true; xhr.abort(); };
 	});
@@ -4349,13 +4349,13 @@ var _Http_toTask = F3(function(router, toTask, request)
 
 function _Http_configureRequest(xhr, request)
 {
-	for (var headers = request.ak; headers.b; headers = headers.b) // WHILE_CONS
+	for (var headers = request.am; headers.b; headers = headers.b) // WHILE_CONS
 	{
 		xhr.setRequestHeader(headers.a.a, headers.a.b);
 	}
-	xhr.timeout = request.bh.a || 0;
-	xhr.responseType = request.aR.d;
-	xhr.withCredentials = request.aK;
+	xhr.timeout = request.bj.a || 0;
+	xhr.responseType = request.aT.d;
+	xhr.withCredentials = request.aM;
 }
 
 
@@ -4376,10 +4376,10 @@ function _Http_toResponse(toBody, xhr)
 function _Http_toMetadata(xhr)
 {
 	return {
-		bl: xhr.responseURL,
-		bc: xhr.status,
-		bd: xhr.statusText,
-		ak: _Http_parseHeaders(xhr.getAllResponseHeaders())
+		bn: xhr.responseURL,
+		be: xhr.status,
+		bf: xhr.statusText,
+		am: _Http_parseHeaders(xhr.getAllResponseHeaders())
 	};
 }
 
@@ -4474,15 +4474,15 @@ function _Http_track(router, xhr, tracker)
 	xhr.upload.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Sending({
-			bb: event.loaded,
-			aD: event.total
+			bd: event.loaded,
+			aF: event.total
 		}))));
 	});
 	xhr.addEventListener('progress', function(event) {
 		if (xhr.c) { return; }
 		_Scheduler_rawSpawn(A2($elm$core$Platform$sendToSelf, router, _Utils_Tuple2(tracker, $elm$http$Http$Receiving({
-			a5: event.loaded,
-			aD: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
+			a7: event.loaded,
+			aF: event.lengthComputable ? $elm$core$Maybe$Just(event.total) : $elm$core$Maybe$Nothing
 		}))));
 	});
 }
@@ -5035,7 +5035,7 @@ var $elm$url$Url$Http = 0;
 var $elm$url$Url$Https = 1;
 var $elm$url$Url$Url = F6(
 	function (protocol, host, port_, path, query, fragment) {
-		return {aj: fragment, al: host, aq: path, as: port_, av: protocol, aw: query};
+		return {al: fragment, an: host, as: path, au: port_, ax: protocol, ay: query};
 	});
 var $elm$core$String$contains = _String_contains;
 var $elm$core$String$length = _String_length;
@@ -5314,15 +5314,24 @@ var $elm$core$Task$perform = F2(
 			A2($elm$core$Task$map, toMessage, task));
 	});
 var $elm$browser$Browser$element = _Browser_element;
+var $author$project$TimeAttack$GetNextVerb = {$: 4};
 var $author$project$TimeAttack$Empty = {$: 1};
-var $author$project$TimeAttack$Finished = 3;
-var $author$project$TimeAttack$GetNextVerb = {$: 5};
+var $author$project$TimeAttack$Loading = 0;
+var $author$project$TimeAttack$Waiting = 0;
+var $elm$core$Basics$negate = function (n) {
+	return -n;
+};
+var $author$project$TimeAttack$initModel = function (_v0) {
+	var min = _v0.a;
+	var sec = _v0.b;
+	return {l: 0, g: $author$project$TimeAttack$Empty, U: '', L: -1, q: 0, d: 0, t: ((min * 60) * 1000) + (sec * 1000), A: min, B: sec, E: 0};
+};
+var $author$project$TimeAttack$Finished = 2;
 var $andrewMacmurray$elm_delay$Delay$Millisecond = 0;
-var $author$project$TimeAttack$ResetQuestion = {$: 8};
+var $author$project$TimeAttack$ResetQuestion = {$: 7};
 var $author$project$TimeAttack$Resp = function (a) {
 	return {$: 0, a: a};
 };
-var $author$project$TimeAttack$Waiting = 0;
 var $andrewMacmurray$elm_delay$Delay$Duration = F2(
 	function (a, b) {
 		return {$: 0, a: a, b: b};
@@ -5384,11 +5393,11 @@ var $author$project$Api$errorToString = F2(
 	});
 var $author$project$Api$GetRandomVerb = {$: 3};
 var $author$project$TimeAttack$GotRandomVerb = function (a) {
-	return {$: 6, a: a};
+	return {$: 5, a: a};
 };
 var $author$project$Api$RandomVerbData = F6(
 	function (verb, subject, englishSubject, right, rightIndex, options) {
-		return {aQ: englishSubject, a4: options, a8: right, a9: rightIndex, be: subject, bm: verb};
+		return {aS: englishSubject, a6: options, ba: right, bb: rightIndex, bg: subject, bo: verb};
 	});
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
@@ -5999,7 +6008,7 @@ var $elm$http$Http$resolve = F2(
 			case 3:
 				var metadata = response.a;
 				return $elm$core$Result$Err(
-					$elm$http$Http$BadStatus(metadata.bc));
+					$elm$http$Http$BadStatus(metadata.be));
 			default:
 				var body = response.b;
 				return A2(
@@ -6027,7 +6036,7 @@ var $elm$http$Http$Request = function (a) {
 };
 var $elm$http$Http$State = F2(
 	function (reqs, subs) {
-		return {az: reqs, aE: subs};
+		return {aB: reqs, aG: subs};
 	});
 var $elm$http$Http$init = $elm$core$Task$succeed(
 	A2($elm$http$Http$State, $elm$core$Dict$empty, _List_Nil));
@@ -6071,7 +6080,7 @@ var $elm$http$Http$updateReqs = F3(
 					return A2(
 						$elm$core$Task$andThen,
 						function (pid) {
-							var _v4 = req.aG;
+							var _v4 = req.aI;
 							if (_v4.$ === 1) {
 								return A3($elm$http$Http$updateReqs, router, otherCmds, reqs);
 							} else {
@@ -6101,7 +6110,7 @@ var $elm$http$Http$onEffects = F4(
 				return $elm$core$Task$succeed(
 					A2($elm$http$Http$State, reqs, subs));
 			},
-			A3($elm$http$Http$updateReqs, router, cmds, state.az));
+			A3($elm$http$Http$updateReqs, router, cmds, state.aB));
 	});
 var $elm$core$List$maybeCons = F3(
 	function (f, mx, xs) {
@@ -6144,7 +6153,7 @@ var $elm$http$Http$onSelfMsg = F3(
 				A2(
 					$elm$core$List$filterMap,
 					A3($elm$http$Http$maybeSend, router, tracker, progress),
-					state.aE)));
+					state.aG)));
 	});
 var $elm$http$Http$Cancel = function (a) {
 	return {$: 0, a: a};
@@ -6158,14 +6167,14 @@ var $elm$http$Http$cmdMap = F2(
 			var r = cmd.a;
 			return $elm$http$Http$Request(
 				{
-					aK: r.aK,
 					aM: r.aM,
-					aR: A2(_Http_mapExpect, func, r.aR),
-					ak: r.ak,
-					aZ: r.aZ,
-					bh: r.bh,
-					aG: r.aG,
-					bl: r.bl
+					aO: r.aO,
+					aT: A2(_Http_mapExpect, func, r.aT),
+					am: r.am,
+					a$: r.a$,
+					bj: r.bj,
+					aI: r.aI,
+					bn: r.bn
 				});
 		}
 	});
@@ -6188,11 +6197,11 @@ var $elm$http$Http$subscription = _Platform_leaf('Http');
 var $elm$http$Http$request = function (r) {
 	return $elm$http$Http$command(
 		$elm$http$Http$Request(
-			{aK: false, aM: r.aM, aR: r.aR, ak: r.ak, aZ: r.aZ, bh: r.bh, aG: r.aG, bl: r.bl}));
+			{aM: false, aO: r.aO, aT: r.aT, am: r.am, a$: r.a$, bj: r.bj, aI: r.aI, bn: r.bn}));
 };
 var $elm$http$Http$get = function (r) {
 	return $elm$http$Http$request(
-		{aM: $elm$http$Http$emptyBody, aR: r.aR, ak: _List_Nil, aZ: 'GET', bh: $elm$core$Maybe$Nothing, aG: $elm$core$Maybe$Nothing, bl: r.bl});
+		{aO: $elm$http$Http$emptyBody, aT: r.aT, am: _List_Nil, a$: 'GET', bj: $elm$core$Maybe$Nothing, aI: $elm$core$Maybe$Nothing, bn: r.bn});
 };
 var $author$project$Api$urlBase = 'https://api-verbly.3digit.dev';
 var $author$project$Api$urlBuilder = function (endpoint) {
@@ -6213,41 +6222,53 @@ var $author$project$Api$get = F3(
 	function (endpoint, decoder, cmd) {
 		return $elm$http$Http$get(
 			{
-				aR: A2($elm$http$Http$expectJson, cmd, decoder),
-				bl: $author$project$Api$urlBuilder(endpoint)
+				aT: A2($elm$http$Http$expectJson, cmd, decoder),
+				bn: $author$project$Api$urlBuilder(endpoint)
 			});
 	});
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$TimeAttack$getVerb = function (model) {
-	var _v0 = model.f;
-	if (_v0 === 3) {
+	var _v0 = model.d;
+	if (_v0 === 2) {
 		return $elm$core$Platform$Cmd$none;
 	} else {
 		var _default = _v0;
 		return A3($author$project$Api$get, $author$project$Api$GetRandomVerb, $author$project$Api$decodeRandomVerbData, $author$project$TimeAttack$GotRandomVerb);
 	}
 };
-var $author$project$TimeAttack$Loading = 0;
-var $elm$core$Basics$negate = function (n) {
-	return -n;
-};
-var $author$project$TimeAttack$initModel = {l: 0, g: $author$project$TimeAttack$Empty, S: '', J: -1, q: 0, f: 0, z: 10000, C: 0};
-var $author$project$TimeAttack$Paused = 1;
-var $author$project$TimeAttack$Running = 2;
-var $author$project$TimeAttack$toggleState = function (model) {
-	var _v0 = model.f;
+var $author$project$TimeAttack$modifyTimer = F3(
+	function (model, timerType, newTime) {
+		var newModel = function () {
+			if (!timerType) {
+				return _Utils_update(
+					model,
+					{A: newTime});
+			} else {
+				return _Utils_update(
+					model,
+					{B: newTime});
+			}
+		}();
+		return _Utils_update(
+			newModel,
+			{t: ((newModel.A * 60) * 1000) + (newModel.B * 1000)});
+	});
+var $author$project$TimeAttack$Editing = 3;
+var $author$project$TimeAttack$toggleTimerState = function (model) {
+	var _v0 = model.d;
 	switch (_v0) {
-		case 1:
-			return 2;
-		case 2:
-			return 1;
+		case 0:
+			return 3;
+		case 3:
+			return 0;
 		default:
-			return model.f;
+			return model.d;
 	}
 };
 var $author$project$TimeAttack$Correct = 1;
 var $author$project$TimeAttack$Incorrect = 2;
+var $author$project$TimeAttack$Running = 1;
 var $author$project$TimeAttack$validateGuess = F2(
 	function (model, guessIdx) {
 		var rightIdx = function () {
@@ -6256,7 +6277,7 @@ var $author$project$TimeAttack$validateGuess = F2(
 				return -1;
 			} else {
 				var verbData = _v2.a;
-				return verbData.a9;
+				return verbData.bb;
 			}
 		}();
 		var result = _Utils_eq(rightIdx, guessIdx) ? 1 : 2;
@@ -6274,11 +6295,8 @@ var $author$project$TimeAttack$validateGuess = F2(
 		var wrong = _v0.b;
 		return _Utils_update(
 			model,
-			{l: model.l + correct, J: guessIdx, q: result, f: 2, C: model.C + wrong});
+			{l: model.l + correct, L: guessIdx, q: result, d: 1, E: model.E + wrong});
 	});
-var $author$project$TimeAttack$init = function (_v3) {
-	return A2($author$project$TimeAttack$update, $author$project$TimeAttack$GetNextVerb, $author$project$TimeAttack$initModel);
-};
 var $author$project$TimeAttack$update = F2(
 	function (msg, model) {
 		switch (msg.$) {
@@ -6287,30 +6305,26 @@ var $author$project$TimeAttack$update = F2(
 			case 1:
 				return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 			case 2:
+				var newModel = $author$project$TimeAttack$initModel(
+					_Utils_Tuple2(model.A, model.B));
 				return _Utils_Tuple2(
-					_Utils_update(
-						model,
-						{
-							f: $author$project$TimeAttack$toggleState(model)
-						}),
-					$elm$core$Platform$Cmd$none);
+					newModel,
+					$author$project$TimeAttack$getVerb(newModel));
 			case 3:
-				return $author$project$TimeAttack$init(0);
-			case 4:
-				var _v1 = (model.z <= 500) ? _Utils_Tuple2(0, 3) : _Utils_Tuple2(model.z - 500, model.f);
+				var _v1 = (model.t <= 500) ? _Utils_Tuple2(0, 2) : _Utils_Tuple2(model.t - 500, model.d);
 				var newTime = _v1.a;
 				var state = _v1.b;
 				var verb = (!newTime) ? $author$project$TimeAttack$Empty : model.g;
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
-						{g: verb, f: state, z: newTime}),
+						{g: verb, d: state, t: newTime}),
 					$elm$core$Platform$Cmd$none);
-			case 5:
+			case 4:
 				return _Utils_Tuple2(
 					model,
 					$author$project$TimeAttack$getVerb(model));
-			case 6:
+			case 5:
 				var result = msg.a;
 				if (result.$ === 1) {
 					var httpError = result.a;
@@ -6319,7 +6333,7 @@ var $author$project$TimeAttack$update = F2(
 							model,
 							{
 								g: $author$project$TimeAttack$Empty,
-								S: A2($author$project$Api$errorToString, httpError, '')
+								U: A2($author$project$Api$errorToString, httpError, '')
 							}),
 						$elm$core$Platform$Cmd$none);
 				} else {
@@ -6332,24 +6346,54 @@ var $author$project$TimeAttack$update = F2(
 							}),
 						$elm$core$Platform$Cmd$none);
 				}
-			case 7:
+			case 6:
 				var guessIdx = msg.a;
 				return _Utils_Tuple2(
 					A2($author$project$TimeAttack$validateGuess, model, guessIdx),
 					A3($andrewMacmurray$elm_delay$Delay$after, 500, 0, $author$project$TimeAttack$ResetQuestion));
-			default:
+			case 7:
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{q: 0}),
 					$author$project$TimeAttack$getVerb(model));
+			case 8:
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{
+							d: $author$project$TimeAttack$toggleTimerState(model)
+						}),
+					$elm$core$Platform$Cmd$none);
+			default:
+				var timerType = msg.a;
+				var newTime = msg.b;
+				var time = function () {
+					var _v3 = $elm$core$String$toInt(newTime);
+					if (_v3.$ === 1) {
+						return 0;
+					} else {
+						var t = _v3.a;
+						return t;
+					}
+				}();
+				return _Utils_Tuple2(
+					A3($author$project$TimeAttack$modifyTimer, model, timerType, time),
+					$elm$core$Platform$Cmd$none);
 		}
 	});
+var $author$project$TimeAttack$init = function (_v0) {
+	return A2(
+		$author$project$TimeAttack$update,
+		$author$project$TimeAttack$GetNextVerb,
+		$author$project$TimeAttack$initModel(
+			_Utils_Tuple2(0, 10)));
+};
 var $author$project$TimeAttack$Countdown = function (a) {
-	return {$: 4, a: a};
+	return {$: 3, a: a};
 };
 var $author$project$TimeAttack$SelectAnswer = function (a) {
-	return {$: 7, a: a};
+	return {$: 6, a: a};
 };
 var $elm$core$Platform$Sub$batch = _Platform_batch;
 var $elm$time$Time$Every = F2(
@@ -6358,7 +6402,7 @@ var $elm$time$Time$Every = F2(
 	});
 var $elm$time$Time$State = F2(
 	function (taggers, processes) {
-		return {au: processes, aF: taggers};
+		return {aw: processes, aH: taggers};
 	});
 var $elm$time$Time$init = $elm$core$Task$succeed(
 	A2($elm$time$Time$State, $elm$core$Dict$empty, $elm$core$Dict$empty));
@@ -6505,7 +6549,7 @@ var $elm$time$Time$spawnHelp = F3(
 	});
 var $elm$time$Time$onEffects = F3(
 	function (router, subs, _v0) {
-		var processes = _v0.au;
+		var processes = _v0.aw;
 		var rightStep = F3(
 			function (_v6, id, _v7) {
 				var spawns = _v7.a;
@@ -6574,7 +6618,7 @@ var $elm$time$Time$millisToPosix = $elm$core$Basics$identity;
 var $elm$time$Time$now = _Time_now($elm$time$Time$millisToPosix);
 var $elm$time$Time$onSelfMsg = F3(
 	function (router, interval, state) {
-		var _v0 = A2($elm$core$Dict$get, interval, state.aF);
+		var _v0 = A2($elm$core$Dict$get, interval, state.aH);
 		if (_v0.$ === 1) {
 			return $elm$core$Task$succeed(state);
 		} else {
@@ -6623,9 +6667,9 @@ var $elm$time$Time$every = F2(
 var $author$project$TimeAttack$keyPressed = _Platform_incomingPort('keyPressed', $elm$json$Json$Decode$int);
 var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
 var $author$project$TimeAttack$subscriptions = function (model) {
-	var _v0 = model.f;
+	var _v0 = model.d;
 	switch (_v0) {
-		case 2:
+		case 1:
 			var _v1 = model.q;
 			if (!_v1) {
 				return $elm$core$Platform$Sub$batch(
@@ -6659,9 +6703,20 @@ var $elm$html$Html$h1 = _VirtualDom_node('h1');
 var $elm$html$Html$h2 = _VirtualDom_node('h2');
 var $elm$html$Html$header = _VirtualDom_node('header');
 var $elm$html$Html$main_ = _VirtualDom_node('main');
-var $author$project$TimeAttack$Reset = {$: 3};
+var $author$project$TimeAttack$NoOp = {$: 0};
+var $author$project$TimeAttack$Reset = {$: 2};
+var $author$project$TimeAttack$ToggleTimerEdit = {$: 8};
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
+var $elm$html$Html$i = _VirtualDom_node('i');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 0, a: a};
 };
@@ -6679,6 +6734,46 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $author$project$TimeAttack$ChangeTime = F2(
+	function (a, b) {
+		return {$: 9, a: a, b: b};
+	});
+var $author$project$TimeAttack$Minute = 0;
+var $author$project$TimeAttack$Second = 1;
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
+var $elm$html$Html$Attributes$min = $elm$html$Html$Attributes$stringProperty('min');
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 1, a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm$core$Basics$modBy = _Basics_modBy;
@@ -6689,10 +6784,58 @@ var $author$project$TimeAttack$toTimeFormat = function (time) {
 	var minuteStr = (minutes < 10) ? ('0' + $elm$core$String$fromInt(minutes)) : $elm$core$String$fromInt(minutes);
 	return minuteStr + (':' + secondStr);
 };
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$TimeAttack$renderTimer = function (model) {
+	var _v0 = model.d;
+	if (_v0 === 3) {
+		return _List_fromArray(
+			[
+				$elm$html$Html$text('Timer: '),
+				A2(
+				$elm$html$Html$input,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('minute indigo lighten-2 white-text right-align'),
+						$elm$html$Html$Attributes$value(
+						$elm$core$String$fromInt(model.A)),
+						$elm$html$Html$Attributes$type_('number'),
+						$elm$html$Html$Attributes$min('0'),
+						$elm$html$Html$Attributes$max('10'),
+						$elm$html$Html$Events$onInput(
+						$author$project$TimeAttack$ChangeTime(0))
+					]),
+				_List_Nil),
+				$elm$html$Html$text(':'),
+				A2(
+				$elm$html$Html$input,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('second indigo lighten-2 white-text'),
+						$elm$html$Html$Attributes$value(
+						$elm$core$String$fromInt(model.B)),
+						$elm$html$Html$Attributes$type_('number'),
+						$elm$html$Html$Attributes$min('0'),
+						$elm$html$Html$Attributes$max('59'),
+						$elm$html$Html$Events$onInput(
+						$author$project$TimeAttack$ChangeTime(1))
+					]),
+				_List_Nil)
+			]);
+	} else {
+		var _default = _v0;
+		return _List_fromArray(
+			[
+				$elm$html$Html$text(
+				'Timer: ' + $author$project$TimeAttack$toTimeFormat(
+					$elm$core$Basics$ceiling(model.t / 1000)))
+			]);
+	}
+};
 var $author$project$TimeAttack$renderInfoBar = function (model) {
 	var midContent = function () {
-		var _v0 = model.f;
-		if (_v0 === 3) {
+		var _v2 = model.d;
+		if (_v2 === 2) {
 			return _List_fromArray(
 				[
 					A2(
@@ -6708,10 +6851,24 @@ var $author$project$TimeAttack$renderInfoBar = function (model) {
 						]))
 				]);
 		} else {
-			var _default = _v0;
+			var _default = _v2;
 			return _List_Nil;
 		}
 	}();
+	var _v0 = function () {
+		var _v1 = model.d;
+		switch (_v1) {
+			case 3:
+				return _Utils_Tuple2($author$project$TimeAttack$ToggleTimerEdit, 'check');
+			case 0:
+				return _Utils_Tuple2($author$project$TimeAttack$ToggleTimerEdit, 'mode_edit');
+			default:
+				var _default = _v1;
+				return _Utils_Tuple2($author$project$TimeAttack$NoOp, 'block');
+		}
+	}();
+	var cmd = _v0.a;
+	var icon = _v0.b;
 	return A2(
 		$elm$html$Html$div,
 		_List_fromArray(
@@ -6731,12 +6888,23 @@ var $author$project$TimeAttack$renderInfoBar = function (model) {
 						A2(
 						$elm$html$Html$h3,
 						_List_Nil,
-						_List_fromArray(
-							[
-								$elm$html$Html$text(
-								'Timer: ' + $author$project$TimeAttack$toTimeFormat(
-									$elm$core$Basics$ceiling(model.z / 1000)))
-							]))
+						A2(
+							$elm$core$List$append,
+							$author$project$TimeAttack$renderTimer(model),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$i,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('small material-icons edit-time'),
+											$elm$html$Html$Events$onClick(cmd)
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text(icon)
+										]))
+								])))
 					])),
 				A2(
 				$elm$html$Html$div,
@@ -6759,7 +6927,7 @@ var $author$project$TimeAttack$renderInfoBar = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								'Score:  ' + ($elm$core$String$fromInt(model.l) + (' / ' + $elm$core$String$fromInt(model.l + model.C))))
+								'Score:  ' + ($elm$core$String$fromInt(model.l) + (' / ' + $elm$core$String$fromInt(model.l + model.E))))
 							]))
 					]))
 			]));
@@ -6771,7 +6939,6 @@ var $elm$html$Html$Attributes$href = function (url) {
 		'href',
 		_VirtualDom_noJavaScriptUri(url));
 };
-var $elm$html$Html$i = _VirtualDom_node('i');
 var $elm$html$Html$li = _VirtualDom_node('li');
 var $elm$html$Html$nav = _VirtualDom_node('nav');
 var $elm$html$Html$ul = _VirtualDom_node('ul');
@@ -6899,7 +7066,7 @@ var $author$project$TimeAttack$getResultClass = F2(
 				return -1;
 			} else {
 				var verbData = _v1.a;
-				return verbData.a9;
+				return verbData.bb;
 			}
 		}();
 		var _v0 = model.q;
@@ -6909,7 +7076,7 @@ var $author$project$TimeAttack$getResultClass = F2(
 			case 1:
 				return _Utils_eq(rightIdx, idx) ? ' green darken-2' : '';
 			default:
-				return _Utils_eq(rightIdx, idx) ? ' green' : (_Utils_eq(model.J, idx) ? ' red' : '');
+				return _Utils_eq(rightIdx, idx) ? ' green' : (_Utils_eq(model.L, idx) ? ' red' : '');
 		}
 	});
 var $elm$html$Html$h4 = _VirtualDom_node('h4');
@@ -7007,13 +7174,13 @@ var $author$project$TimeAttack$renderQuestion = F2(
 								_List_Nil,
 								_List_fromArray(
 									[
-										$elm$html$Html$text(randomVerbData.be + ' ____________')
+										$elm$html$Html$text(randomVerbData.bg + ' ____________')
 									]))
 							])),
 					A2(
 						$elm$core$List$indexedMap,
 						$author$project$TimeAttack$renderAnswer(model),
-						randomVerbData.a4)))
+						randomVerbData.a6)))
 			]);
 	});
 var $author$project$TimeAttack$renderOutput = function (model) {
@@ -7039,8 +7206,8 @@ var $author$project$TimeAttack$renderOutput = function (model) {
 };
 var $author$project$TimeAttack$view = function (model) {
 	var header = function () {
-		var _v0 = model.f;
-		if (_v0 === 3) {
+		var _v0 = model.d;
+		if (_v0 === 2) {
 			return A2(
 				$elm$html$Html$div,
 				_List_Nil,
@@ -7062,7 +7229,7 @@ var $author$project$TimeAttack$view = function (model) {
 						_List_fromArray(
 							[
 								$elm$html$Html$text(
-								'You got ' + ($elm$core$String$fromInt(model.l) + (' out of ' + ($elm$core$String$fromInt(model.l + model.C) + ' correct!'))))
+								'You got ' + ($elm$core$String$fromInt(model.l) + (' out of ' + ($elm$core$String$fromInt(model.l + model.E) + ' correct!'))))
 							]))
 					]));
 		} else {
@@ -7078,18 +7245,40 @@ var $author$project$TimeAttack$view = function (model) {
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text(val.aQ + ('  ' + val.bm))
+							$elm$html$Html$text(val.aS + ('  ' + val.bo))
 						]));
 			} else {
 				return A2(
-					$elm$html$Html$h1,
+					$elm$html$Html$div,
+					_List_Nil,
 					_List_fromArray(
 						[
-							$elm$html$Html$Attributes$class('center')
-						]),
-					_List_fromArray(
-						[
-							$elm$html$Html$text('Loading...')
+							A2(
+							$elm$html$Html$h1,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('center')
+								]),
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Loading...')
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('progress')
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$div,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$class('indeterminate')
+										]),
+									_List_Nil)
+								]))
 						]));
 			}
 		}
@@ -7143,6 +7332,6 @@ var $author$project$TimeAttack$view = function (model) {
 			]));
 };
 var $author$project$TimeAttack$main = $elm$browser$Browser$element(
-	{aX: $author$project$TimeAttack$init, bg: $author$project$TimeAttack$subscriptions, bk: $author$project$TimeAttack$update, bn: $author$project$TimeAttack$view});
+	{aZ: $author$project$TimeAttack$init, bi: $author$project$TimeAttack$subscriptions, bm: $author$project$TimeAttack$update, bp: $author$project$TimeAttack$view});
 _Platform_export({'TimeAttack':{'init':$author$project$TimeAttack$main(
 	$elm$json$Json$Decode$succeed(0))(0)}});}(this));

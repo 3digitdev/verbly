@@ -35,6 +35,8 @@ port keyPressed : (Int -> msg) -> Sub msg
 
 type alias Model =
     { timeRemaining : Int
+    , timerSeconds : Int
+    , timerMinutes : Int
     , state : TimerState
     , currentVerb : QueryResult
     , errors : String
@@ -52,9 +54,9 @@ type QueryResult
 
 type TimerState
     = Loading
-    | Paused
     | Running
     | Finished
+    | Editing
 
 
 type GuessResult
@@ -63,18 +65,25 @@ type GuessResult
     | Incorrect
 
 
+type TimerInput
+    = Minute
+    | Second
+
+
 
 -- INIT
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
-    update GetNextVerb initModel
+    update GetNextVerb (initModel ( 0, 10 ))
 
 
-initModel : Model
-initModel =
-    { timeRemaining = 10000
+initModel : ( Int, Int ) -> Model
+initModel ( min, sec ) =
+    { timeRemaining = (min * 60 * 1000) + (sec * 1000)
+    , timerSeconds = sec
+    , timerMinutes = min
     , state = Loading
     , currentVerb = Empty
     , errors = ""
@@ -92,13 +101,14 @@ initModel =
 type Msg
     = NoOp
     | DisableClick Int
-    | ToggleTimer
     | Reset
     | Countdown Time.Posix
     | GetNextVerb
     | GotRandomVerb Api.GetRandomVerbDataResult
     | SelectAnswer Int
     | ResetQuestion
+    | ToggleTimerEdit
+    | ChangeTime TimerInput String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -110,11 +120,12 @@ update msg model =
         DisableClick _ ->
             ( model, Cmd.none )
 
-        ToggleTimer ->
-            ( { model | state = toggleState model }, Cmd.none )
-
         Reset ->
-            init ()
+            let
+                newModel =
+                    initModel ( model.timerMinutes, model.timerSeconds )
+            in
+            ( newModel, getVerb newModel )
 
         Countdown _ ->
             let
@@ -151,6 +162,35 @@ update msg model =
         ResetQuestion ->
             ( { model | guessResult = Waiting }, getVerb model )
 
+        ToggleTimerEdit ->
+            ( { model | state = toggleTimerState model }, Cmd.none )
+
+        ChangeTime timerType newTime ->
+            let
+                time =
+                    case String.toInt newTime of
+                        Nothing ->
+                            0
+
+                        Just t ->
+                            t
+            in
+            ( modifyTimer model timerType time, Cmd.none )
+
+
+modifyTimer : Model -> TimerInput -> Int -> Model
+modifyTimer model timerType newTime =
+    let
+        newModel =
+            case timerType of
+                Minute ->
+                    { model | timerMinutes = newTime }
+
+                Second ->
+                    { model | timerSeconds = newTime }
+    in
+    { newModel | timeRemaining = (newModel.timerMinutes * 60 * 1000) + (newModel.timerSeconds * 1000) }
+
 
 getVerb : Model -> Cmd Msg
 getVerb model =
@@ -162,14 +202,14 @@ getVerb model =
             Api.get Api.GetRandomVerb Api.decodeRandomVerbData GotRandomVerb
 
 
-toggleState : Model -> TimerState
-toggleState model =
+toggleTimerState : Model -> TimerState
+toggleTimerState model =
     case model.state of
-        Paused ->
-            Running
+        Loading ->
+            Editing
 
-        Running ->
-            Paused
+        Editing ->
+            Loading
 
         _ ->
             model.state
@@ -264,7 +304,13 @@ view model =
                             Html.h1 [ Attributes.class "center" ] [ Html.text (val.englishSubject ++ "  " ++ val.verb) ]
 
                         Empty ->
-                            Html.h1 [ Attributes.class "center" ] [ Html.text "Loading..." ]
+                            Html.div
+                                []
+                                [ Html.h1 [ Attributes.class "center" ] [ Html.text "Loading..." ]
+                                , Html.div
+                                    [ Attributes.class "progress" ]
+                                    [ Html.div [ Attributes.class "indeterminate" ] [] ]
+                                ]
     in
     Html.div
         []
@@ -303,6 +349,17 @@ renderInfoBar model =
 
                 default ->
                     []
+
+        ( cmd, icon ) =
+            case model.state of
+                Editing ->
+                    ( ToggleTimerEdit, "check" )
+
+                Loading ->
+                    ( ToggleTimerEdit, "mode_edit" )
+
+                default ->
+                    ( NoOp, "block" )
     in
     Html.div
         [ Attributes.class "row indigo lighten-2 white-text" ]
@@ -310,7 +367,15 @@ renderInfoBar model =
             [ Attributes.class "col s3 m4 l5 right-align" ]
             [ Html.h3
                 []
-                [ Html.text ("Timer: " ++ toTimeFormat (ceiling (toFloat model.timeRemaining / 1000))) ]
+                (List.append
+                    (renderTimer model)
+                    [ Html.i
+                        [ Attributes.class "small material-icons edit-time"
+                        , Events.onClick cmd
+                        ]
+                        [ Html.text icon ]
+                    ]
+                )
             ]
         , Html.div
             [ Attributes.class "col s6 m4 l2 center-align" ]
@@ -328,6 +393,36 @@ renderInfoBar model =
                 ]
             ]
         ]
+
+
+renderTimer : Model -> List (Html Msg)
+renderTimer model =
+    case model.state of
+        Editing ->
+            [ Html.text "Timer: "
+            , Html.input
+                [ Attributes.class "minute indigo lighten-2 white-text right-align"
+                , Attributes.value (String.fromInt model.timerMinutes)
+                , Attributes.type_ "number"
+                , Attributes.min "0"
+                , Attributes.max "10"
+                , Events.onInput (ChangeTime Minute)
+                ]
+                []
+            , Html.text ":"
+            , Html.input
+                [ Attributes.class "second indigo lighten-2 white-text"
+                , Attributes.value (String.fromInt model.timerSeconds)
+                , Attributes.type_ "number"
+                , Attributes.min "0"
+                , Attributes.max "59"
+                , Events.onInput (ChangeTime Second)
+                ]
+                []
+            ]
+
+        default ->
+            [ Html.text ("Timer: " ++ toTimeFormat (ceiling (toFloat model.timeRemaining / 1000))) ]
 
 
 toTimeFormat : Int -> String
